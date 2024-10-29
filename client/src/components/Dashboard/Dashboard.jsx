@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../utils/axios.helper';
+import Button from '../Button';
 
 function Dashboard() {
   const [loading, setLoading] = useState(false);
@@ -8,10 +10,11 @@ function Dashboard() {
     fullName: '',
     username: '',
     email: '',
-    role: 'Student',  // Assuming a default role of "Student" here
-    lastLogin: ''
+    role: 'Student',
+    lastLogin: '',
   });
   const authStatus = useSelector((state) => state.auth.status);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -19,15 +22,14 @@ function Dashboard() {
       try {
         const response = await axiosInstance.get('/users/current-user');
         const { fullName, email, userName, lastLogin } = response.data.data;
-        
-        setUserInfo({
-          fullName: fullName,
+
+        setUserInfo((prev) => ({
+          ...prev,
+          fullName,
           username: userName,
-          email: email,
-          role: 'Student', // Set role here or use value from API if available
-          lastLogin: lastLogin ? new Date(lastLogin).toLocaleString() : 'Not available'
-        });
-        
+          email,
+          lastLogin: lastLogin ? new Date(lastLogin).toLocaleString() : 'Not available',
+        }));
       } catch (error) {
         console.log('Error fetching user data:', error);
       } finally {
@@ -39,6 +41,10 @@ function Dashboard() {
       fetchUserData();
     }
   }, [authStatus]);
+
+  if (!authStatus) {
+    return <p className="text-center text-gray-200">Please log in to view your dashboard.</p>;
+  }
 
   return (
     <div className="max-w-lg mx-auto my-8 p-6 bg-gray-800 text-white rounded-lg shadow-lg">
@@ -80,6 +86,12 @@ function Dashboard() {
           </table>
         </div>
       )}
+
+      <div className="mt-6 flex justify-center">
+        <Button onClick={() => navigate('/set-acad-goals')} title="Set Academic Goals">
+          Set Academic Goals
+        </Button>
+      </div>
     </div>
   );
 }

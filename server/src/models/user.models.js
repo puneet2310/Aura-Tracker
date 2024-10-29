@@ -49,6 +49,10 @@ const userSchema = new Schema(
             required: [true, "Passowrd is required"], //in bracket there is error message when user is not putting password on frontend
 
         }, 
+        academicGoals: [{
+            type: Schema.Types.ObjectId,
+            ref: "AcademicGoals"
+        }],
         refreshToken:{
             type: String
         }
@@ -98,7 +102,6 @@ userSchema.methods.generateRefreshToken = function (){
     {expiresIn: process.env.REFRESH_TOKEN_EXPIRY}
     );
 }
-
 
 
 export const User = mongoose.model("User", userSchema)

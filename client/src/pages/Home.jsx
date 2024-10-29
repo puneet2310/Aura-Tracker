@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom'; // useNavigate for cleaner navigation
-import axiosInstance from '../utils/axios.helper';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../components';
 import { ArrowRightIcon } from '@heroicons/react/solid';
 
 function Home() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState('');
-  const [displayText, setDisplayText] = useState('');
   const authStatus = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
-
-  // console.log('authStatus:', authStatus);
-  // console.log('userData:', userData);
 
   const fullMessage =
     "Aura Tracker helps you manage tasks efficiently, keep track of your goals, and stay organized. Start by exploring your dashboard and setting up your tasks for the day!";
@@ -23,18 +18,7 @@ function Home() {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-
-        //You have 2 choices here to display the current user name
-        // 1. Use the userData from the Redux store
-        // 2. Use the userData from the backend response using controller getCurrentUser
-
-              //Fist choice
-        // const response = await axiosInstance.get('/users/current-user');
-        // const { fullName } = response.data.data;
-            
-              //Second choice
         setUser(userData.fullName);
-
       } catch (error) {
         console.log('Error fetching user data:', error);
       } finally {
@@ -47,53 +31,83 @@ function Home() {
     }
   }, [authStatus]);
 
-  // useEffect(() => {
-  //   if (!loading) {
-  //     setDisplayText(''); 
-  //     typeMessage();
-  //   }
-  // }, [loading, user]);
-
-  // const typeMessage = () => {
-  //   let index = 0;
-  //   const typingInterval = setInterval(() => {
-  //     if (index < fullMessage.length) {
-  //       setDisplayText((prev) => prev + fullMessage[index]);
-  //       index++;
-  //     } else {
-  //       clearInterval(typingInterval);
-  //     }
-  //   }, 50);
-
-    // Cleanup interval on component unmount
-    // return () => clearInterval(typingInterval);
-  // };
-
   const handleDashboard = () => {
     navigate(authStatus ? '/dashboard' : '/login');
   };
+  const handleAcademicGoals = () => {
+    navigate(authStatus ? '/all-acad-goals' : '/login');
+  };
 
   return (
-    <div className="min-h-screen flex items-center text-center p-4">
+    <div className="min-h-screen  items-center justify-start p-8 text-center space-y-12">
       {loading ? (
         <p className="text-gray-200 animate-pulse">Loading...</p>
       ) : (
         <>
-          <h2 className="text-5xl font-bold mb-4">
-            Welcome <span className="font-extrabold">{user || 'You'}</span> to Aura Tracker
-          </h2>
-          <br />
-          <div className="w-2/3">
-            <p className="text-lg mb-6 mt-4">{fullMessage}</p>
-            <div className="inline-block group">
-              <Button
-                label="Dashboard"
-                className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-full flex items-center justify-center transition-all duration-300"
-                onClick={handleDashboard}
-              >
-                Go to Dashboard
-                <ArrowRightIcon className="h-5 w-5 ml-2 text-white transition-opacity duration-300 opacity-50 group-hover:opacity-100" />
-              </Button>
+          {/* Welcome Section */}
+          <div className=" w-full flex flex-col items-center space-y-4 mt-24">
+            <h2 className="text-5xl font-bold">
+              Welcome <span className="font-extrabold">{user || 'You'}</span> to Aura Tracker
+            </h2>
+            <p className="text-lg text-gray-700 max-w-2xl">{fullMessage}</p>
+            <Button
+              label="Dashboard"
+              className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
+              onClick={handleDashboard}
+            >
+              Go to Dashboard
+              <ArrowRightIcon className="h-5 w-5 ml-2 text-white transition-opacity duration-300 opacity-50 group-hover:opacity-100" />
+            </Button>
+          </div>
+
+          {/* Spacer to push the academic goals section further down */}
+          <div className="min-h-20 w-full"></div>
+
+          {/* Academic Goals Section */}
+          <div className=' flex items-center justify-center'>
+            <div className="w-1/2 p-6 shadow-lg rounded-lg text-left">
+              <h2 className="text-center text-2xl font-bold text-gray-800 mb-2">Set Your Academic Goals</h2>
+              <p className="text-center text-gray-600 mb-4">
+                Achieve your potential by setting clear academic goals. Track your progress, stay focused, and reach
+                new heights!
+              </p>
+              {authStatus ? (
+                <Button
+                  label="Academic Goals"
+                  className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
+                  onClick={handleAcademicGoals}
+                >
+                  Go to Academic Goals
+                  <ArrowRightIcon className="h-5 w-5 ml-2 text-white transition-opacity duration-300 opacity-50 group-hover:opacity-100" />
+                </Button>
+              ) : (
+                <p className="text-sm italic text-gray-500">
+                  Log in to start setting and tracking your academic goals.
+                </p>
+              )}
+            </div>
+
+            {/* Academic Goals Section */}
+            <div className="w-1/2 p-6 shadow-lg rounded-lg text-left">
+              <h2 className="text-center text-2xl font-bold text-gray-800 mb-2">Set Your Academic Goals</h2>
+              <p className="text-center text-gray-600 mb-4">
+                Achieve your potential by setting clear academic goals. Track your progress, stay focused, and reach
+                new heights!
+              </p>
+              {authStatus ? (
+                <Button
+                  label="Academic Goals"
+                  className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
+                  onClick={handleAcademicGoals}
+                >
+                  Go to Academic Goals
+                  <ArrowRightIcon className="h-5 w-5 ml-2 text-white transition-opacity duration-300 opacity-50 group-hover:opacity-100" />
+                </Button>
+              ) : (
+                <p className="text-sm italic text-gray-500">
+                  Log in to start setting and tracking your academic goals.
+                </p>
+              )}
             </div>
           </div>
         </>

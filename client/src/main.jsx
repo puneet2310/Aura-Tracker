@@ -12,6 +12,8 @@ import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import Dashboard from './components/Dashboard/Dashboard.jsx'
+import SetAcademicGoals from './components/AcademicGoals/SetAcademicGoals.jsx'
+import AllAcadGoals from './components/AcademicGoals/AllAcadGoals.jsx'
 
 
 
@@ -34,8 +36,16 @@ const router = createBrowserRouter([
       },
       {
         path: '/dashboard',
-        element: <Dashboard />
+        element: <Dashboard />,
       },
+      {
+        path: '/set-acad-goals',
+        element: <SetAcademicGoals />,
+      },
+      {
+        path: '/all-acad-goals',
+        element: <AllAcadGoals />,
+      }
     ],
   },
 ]);
