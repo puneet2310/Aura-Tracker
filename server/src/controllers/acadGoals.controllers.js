@@ -46,7 +46,7 @@ const setAcadGoals = asyncHandler(async (req, res) => {
 
 const getAcadGoals = asyncHandler(async (req, res) => {
 
-    const goals = await AcademicGoals.find({user: req.user._id}).lean().exec()
+    const goals = await AcademicGoals.find({user: req.user._id})
     console.log("Goals from controller",goals)
 
     return res.status(200)
@@ -55,7 +55,73 @@ const getAcadGoals = asyncHandler(async (req, res) => {
         )
 })
 
+const updateAcadGoal = asyncHandler(async (req, res) => {
+    
+    console.log("Req.body :", req.body)
+    // console.log("Req.user :", req.user)
+
+    const {id, title, description, targetDate, completed} = req.body
+
+    const goalTobeUpdated = await AcademicGoals.findById(id)
+    console.log("Goal to be updated :", goalTobeUpdated)
+
+    try {
+        //goalTobeUpdated.description = newDescription
+
+        const result = await AcademicGoals.findByIdAndUpdate(
+            id,
+            {
+                title,
+                description: description,
+                targetDate,
+                isComplete: completed
+            },
+            {new: true}
+        )
+        console.log("Result after update :", result)
+
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(200, result, "Academic goal updated successfully")
+                )
+    } catch (error) {
+        console.log("Error updating goal:", error);
+        
+    }
+
+
+})
+
+const deleteAcadGoal = asyncHandler(async (req, res) => {
+    console.log("Req.user :", req.user)
+
+    const {id} = req.body
+    console.log("Id to be deleted :", id)
+
+    const goal = await AcademicGoals.findByIdAndDelete(id)
+    console.log("Goal to be deleted :", goal)
+
+    const updatedGoals = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $pull: {academicGoals: id}
+        },
+         //Returns the updated document after the update is applied, Without this, it would return the document before modification
+    )
+
+    console.log("Updated goals :", updatedGoals)
+    console.log("Deleted goal successfully")
+
+    return res.status(200)
+    .json(
+        new ApiResponse(200, null, "Academic goal deleted successfully")
+        )
+    
+})
 export {
     setAcadGoals,
-    getAcadGoals
+    getAcadGoals,
+    updateAcadGoal,
+    deleteAcadGoal
 }

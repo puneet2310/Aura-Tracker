@@ -19,7 +19,7 @@ function SetAcademicGoals() {
     const navigate = useNavigate();
 
     const setAcadGoals = async (data) => {
-        console.log(data)
+        // console.log(data)
         try {
             setLoading(true);
             const response = await axiosInstance.post("/acadGoals/set-acad-goals", data);

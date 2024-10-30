@@ -14,7 +14,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import Dashboard from './components/Dashboard/Dashboard.jsx'
 import SetAcademicGoals from './components/AcademicGoals/SetAcademicGoals.jsx'
 import AllAcadGoals from './components/AcademicGoals/AllAcadGoals.jsx'
-
+import 'antd/dist/reset.css';
 
 
 const router = createBrowserRouter([
@@ -45,6 +45,9 @@ const router = createBrowserRouter([
       {
         path: '/all-acad-goals',
         element: <AllAcadGoals />,
+      },
+      {
+        path: ''
       }
     ],
   },

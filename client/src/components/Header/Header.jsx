@@ -11,7 +11,9 @@ function Header() {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   
+  console.log(userData)
   const avatar = userData?.avatar;
+  console.log(avatar)
   const navItems = [
     {
       name: 'Home',
@@ -73,7 +75,7 @@ function Header() {
                 <button onClick={() => setShowDropdown(!showDropdown)} className='focus:outline-none'>
                   <img
                     src={avatar}
-                    alt='Profile'
+                    alt=''
                     className='w-10 h-10 rounded-full object-cover border border-gray-400'
                   />
                 </button>

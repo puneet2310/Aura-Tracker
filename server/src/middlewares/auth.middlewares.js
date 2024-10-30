@@ -23,7 +23,7 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
             throw new ApiError(401, "You are not authenticated")
         }
 
-        req.user = user
+        req.user = user //this will be very useful where i can get directly access to user data
 
         next() // this will bw responsible for miving to next middlewware or at the end of the request
 

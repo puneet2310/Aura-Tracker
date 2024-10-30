@@ -19,8 +19,8 @@ function LogoutButton() {
         console.log('Logout success')
         dispatch(authLogout())
         toast.success('Logged out successfully')
-        window.location.reload()
         navigate('/')
+        window.location.reload()
       }
     } catch (error) {
       console.error("Logout failed:", error)
