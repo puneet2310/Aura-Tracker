@@ -3,8 +3,8 @@
 ## Team Name: GenTop
 
 ### Team Composition:
-- Animesh Maurya ([github.com/duke107](https://github.com/Animesh-Maurya))
-- Harsh Singh ([github.com/Stardust369](https://github.com/harshsingh9222))
+- Animesh Maurya ([github.com/Animesh-Maurya](https://github.com/Animesh-Maurya))
+- Harsh Singh ([github.com/harshsingh9222](https://github.com/harshsingh9222))
 - Puneet Kumar ([github.com/puneet2310](https://github.com/puneet2310))
 
 ### Progress on our website:
