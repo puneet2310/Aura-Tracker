@@ -9,7 +9,9 @@ import {
         updateUserAvatar,
         refreshAccessToken,
         getCurrentUser,
-        googleLogin
+        googleLogin,
+        calculateAcadAura,
+        leaderboard
         } 
         from "../controllers/user.controllers.js"
 import { upload } from "../middlewares/multer.middlewares.js"
@@ -32,6 +34,7 @@ router.route("/login").post(loginUser)
 router.route("/google").get(googleLogin)
 router.route("/refresh-token").post(refreshAccessToken)
 
+router.route("/get-top-users").get(leaderboard)
 
 //secured routes
 
@@ -43,5 +46,6 @@ router.route("/current-user").get(verifyJWT, getCurrentUser)
 router.route("/update-account-details").patch(verifyJWT, updateAccountDetails)
 
 router.route("/update-avatar").patch(verifyJWT , upload.single("avatar"), updateUserAvatar)
+router.route("/get-acad-aura").get(verifyJWT, calculateAcadAura)
 
 export default router

@@ -28,6 +28,11 @@ const acadGoalsSchema = new Schema(
             type: Boolean,
             required: true
         },
+        status:{
+            type: String,
+            enum: ["Active", "Completed", "Missed"],
+            default: "Active"
+        },
         user: {
             type: Schema.Types.ObjectId,
             ref: "User",

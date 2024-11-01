@@ -7,6 +7,8 @@ import Button from "../Button";
 import { toast } from "react-toastify";
 import { icons } from "../../assets/Icons.jsx";
 import axiosInstance from "../../utils/axios.helper.js";
+import { useDispatch } from "react-redux";
+import { addUserAcadGoals } from "../../store/userSlice.js";
 
 function SetAcademicGoals() {
     const {
@@ -17,6 +19,7 @@ function SetAcademicGoals() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const setAcadGoals = async (data) => {
         // console.log(data)
@@ -24,7 +27,32 @@ function SetAcademicGoals() {
             setLoading(true);
             const response = await axiosInstance.post("/acadGoals/set-acad-goals", data);
             console.log(response.data.data);
+            // dispatch(addUserAcadGoals(response.data.data))
+
+            dispatch(addUserAcadGoals(response.data.data));
             toast.success("Academic goal created successfully!");
+
+            const allGoals = await axiosInstance.get("/acadGoals/get-acad-goals");
+            console.log("All goals are: ", allGoals);
+        
+            const currDate = new Date();
+            console.log("Current Date:", currDate);
+        
+            // Update goals if past target date
+            const updatedGoals = await Promise.all(
+                allGoals.data.data.map(async (goal) => {
+                console.log("Goal:", goal);
+                const goalDueDate = new Date(goal.targetDate);
+                if (currDate > goalDueDate && goal.status !== 'Completed') {
+                    goal.status = 'Missed';
+                    const updateStatus = await axiosInstance.put('/acadGoals/update-acad-goal', goal);
+                    console.log("Updated Status for Goal:", updateStatus);
+                }
+                return goal;
+                })
+            );
+        
+            console.log("Updated goals are:", updatedGoals);
             
             navigate("/")
             
@@ -91,17 +119,6 @@ function SetAcademicGoals() {
                     </p>
                 )}
 
-                <div className="flex items-center mt-4">
-                    <input
-                        type="checkbox"
-                        id="isComplete"
-                        {...register("isComplete")}
-                        className="mr-2"
-                    />
-                    <label htmlFor="isComplete" className="text-gray-700">
-                        Mark as Complete
-                    </label>
-                </div>
 
                 <Button
                     type="submit"

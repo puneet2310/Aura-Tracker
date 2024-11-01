@@ -53,6 +53,10 @@ const userSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "AcademicGoals"
         }],
+        acadAura:{
+            type: Number,
+            default: 0
+        },
         refreshToken:{
             type: String
         }
@@ -71,7 +75,6 @@ userSchema.pre("save", async function(next){ // never use here arrow function be
 })
 
 //compare the password.... 
-
 userSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password, this.password)
 }
@@ -102,6 +105,5 @@ userSchema.methods.generateRefreshToken = function (){
     {expiresIn: process.env.REFRESH_TOKEN_EXPIRY}
     );
 }
-
 
 export const User = mongoose.model("User", userSchema)

@@ -25,6 +25,7 @@ const setAcadGoals = asyncHandler(async (req, res) => {
         description, 
         targetDate,
         isComplete: false,
+        status: "Active",
         user: req.user._id // set by the auth middleware during verifying the JWT
     })
 
@@ -60,25 +61,39 @@ const updateAcadGoal = asyncHandler(async (req, res) => {
     console.log("Req.body :", req.body)
     // console.log("Req.user :", req.user)
 
-    const {id, title, description, targetDate, completed} = req.body
+    const {_id, title, description, targetDate, isComplete, status} = req.body
 
-    const goalTobeUpdated = await AcademicGoals.findById(id)
+    const goalTobeUpdated = await AcademicGoals.findById(_id)
     console.log("Goal to be updated :", goalTobeUpdated)
 
     try {
         //goalTobeUpdated.description = newDescription
 
         const result = await AcademicGoals.findByIdAndUpdate(
-            id,
+            _id,
             {
                 title,
                 description: description,
                 targetDate,
-                isComplete: completed
+                isComplete: isComplete,
+                status: status
             },
             {new: true}
         )
+
+        console.log(isComplete)
+        let user
+        if (isComplete) {
+            user = await User.findByIdAndUpdate(
+                req.user._id,
+                {
+                    $inc: { acadAura: 10 } // Increment acadAura by 10
+                },
+                { new: true }
+            );
+        }
         console.log("Result after update :", result)
+        console.log("User :", user)
 
         return res
             .status(200)
@@ -89,8 +104,6 @@ const updateAcadGoal = asyncHandler(async (req, res) => {
         console.log("Error updating goal:", error);
         
     }
-
-
 })
 
 const deleteAcadGoal = asyncHandler(async (req, res) => {
@@ -102,12 +115,14 @@ const deleteAcadGoal = asyncHandler(async (req, res) => {
     const goal = await AcademicGoals.findByIdAndDelete(id)
     console.log("Goal to be deleted :", goal)
 
+    // Remove the goal from the user's academicGoals array once that particular goal is deleted from academicGoals collection
     const updatedGoals = await User.findByIdAndUpdate(
-        req.user._id,
+        req.user._id, 
         {
-            $pull: {academicGoals: id}
+            $pull: {academicGoals: id} ,
+            $inc: { acadAura: -10 } // Decrement acadAura by 10
         },
-         //Returns the updated document after the update is applied, Without this, it would return the document before modification
+        {new: true} //Returns the updated document after the update is applied, Without this, it would return the document before modification
     )
 
     console.log("Updated goals :", updatedGoals)
@@ -119,6 +134,7 @@ const deleteAcadGoal = asyncHandler(async (req, res) => {
         )
     
 })
+
 export {
     setAcadGoals,
     getAcadGoals,

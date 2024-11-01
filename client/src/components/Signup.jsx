@@ -7,9 +7,6 @@ import Input from "./Input";
 import Button from "./Button";
 import { toast } from "react-toastify";
 import { icons } from "../assets/Icons.jsx";
-import {useGoogleLogin} from '@react-oauth/google'
-import { useDispatch } from "react-redux";
-import {login as authLogin} from '../store/authSlice'
 import GoogleLogin from "./GoogleLogin.jsx";
 
 function SignUp() {
@@ -24,7 +21,7 @@ function SignUp() {
     } = useForm();
 
     const signup = async (data) => {
-        console.log(data)
+        console.log(data);
         const formData = new FormData();
         for (const key in data) {
             formData.append(key, data[key]);
@@ -32,22 +29,19 @@ function SignUp() {
         formData.append("avatar", data.avatar[0]);
         setError("");
         setLoading(true);
-        console.log("Data is : ",formData);
+        console.log("Data is : ", formData);
         try {
-            const response = await axiosInstance.post(
-                "/users/register",
-                formData
-            );
+            const response = await axiosInstance.post("/users/register", formData);
             if (response?.data?.data) {
                 toast.success("Account created successfully 🥳");
                 navigate("/login");
             }
         } catch (error) {
-            if (error.status === 403) {
+            if (error.response && error.response.status === 403) {
                 setError("User with email or username already exists");
             } else {
                 console.log(error);
-                setError(error.message);
+                setError("An error occurred. Please try again.");
             }
         } finally {
             setLoading(false);
@@ -55,110 +49,70 @@ function SignUp() {
     };
 
     return (
-        // <div className="h-screen w-full overflow-y-auto bg-[#121212] text-white">
-            <div className="mx-auto my-10 flex w-full max-w-sm flex-col px-4">
-                <div className="mx-auto inline-block">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-900">
+            <div className="bg-white shadow-md rounded-lg p-6 max-w-md w-full">
+                <div className="text-center mb-4">
                     <Link to="/">
                         <Logo width="76" />
                     </Link>
+                    <h1 className="text-2xl font-bold mt-2">Create an Account</h1>
+                    <h6 className="mt-1">
+                        Already have an Account?{" "}
+                        <Link to="/login" className="text-indigo-600 hover:underline">
+                            Sign in now
+                        </Link>
+                    </h6>
                 </div>
-                <div className="my-4 w-full text-center text-xl font-semibold">
-                    Create an Account
-                </div>
-                <h6 className="mx-auto mb-1">
-                    Already have an Account?{" "}
-                    <Link
-                        to={"/login"}
-                        className="font-semibold text-blue-600 hover:text-blue-500"
-                    >
-                        Sign in now
-                    </Link>
-                </h6>
-                {error && (
-                    <p className="text-red-600 mt-8 text-center">{error}</p>
-                )}
-                <form
-                    onSubmit={handleSubmit(signup)}
-                    className="mx-auto mt-2 flex w-full max-w-sm flex-col px-4"
-                >
+                {error && <p className="text-red-600 mb-4 text-center">{error}</p>}
+                <form onSubmit={handleSubmit(signup)} className="flex flex-col space-y-4">
                     <Input
                         label="Full Name"
                         required
-                        className="px-2 rounded-lg"
                         placeholder="Enter your full name"
                         {...register("fullName", { required: true })}
                     />
                     {errors.fullName?.type === "required" && (
-                        <p className="text-red-600 px-2 mt-1">
-                            Full name is required
-                        </p>
+                        <p className="text-red-600">Full name is required</p>
                     )}
                     <Input
                         label="Username"
                         required
-                        className="px-2 rounded-lg"
-                        className2="pt-5"
                         placeholder="Choose your username"
-                        {...register("userName", {
-                            required: true,
-                        })}
+                        {...register("userName", { required: true })}
                     />
                     {errors.userName?.type === "required" && (
-                        <p className="text-red-600 px-2 mt-1">
-                            Username is required
-                        </p>
+                        <p className="text-red-600">Username is required</p>
                     )}
                     <Input
                         label="Email Address"
-                        placeholder="Enter your email address"
                         type="email"
-                        className="px-2 rounded-lg"
-                        className2="pt-5"
+                        placeholder="Enter your email address"
                         required
                         {...register("email", {
-                            required: true,
-                            validate: {
-                                matchPattern: (value) =>
-                                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
-                                        value
-                                    ) ||
-                                    "Email address must be a valid address",
+                            required: "Email is required",
+                            pattern: {
+                                value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                                message: "Email address must be a valid address",
                             },
                         })}
                     />
                     {errors.email && (
-                        <p className="text-red-600 px-2 mt-1">
-                            {errors.email.message}
-                        </p>
-                    )}
-                    {errors.email?.type === "required" && (
-                        <p className="text-red-600 px-2 mt-1">
-                            Email is required
-                        </p>
+                        <p className="text-red-600">{errors.email.message}</p>
                     )}
                     <Input
                         label="Password"
-                        className="px-2 rounded-lg"
-                        className2="pt-5"
                         type="password"
                         placeholder="Create your password"
                         required
-                        {...register("password", {
-                            required: true,
-                        })}
+                        {...register("password", { required: true })}
                     />
                     {errors.password?.type === "required" && (
-                        <p className="text-red-600 px-2 mt-1">
-                            Password is required
-                        </p>
+                        <p className="text-red-600">Password is required</p>
                     )}
                     <Input
                         label="Avatar"
                         type="file"
                         required
-                        className="px-2 rounded-lg"
-                        className2="pt-5"
-                        placeholder="Upload your avatar"
                         {...register("avatar", {
                             required: false,
                             validate: (file) => {
@@ -170,31 +124,27 @@ function SignUp() {
                                 const fileType = file[0]?.type;
                                 return allowedExtensions.includes(fileType)
                                     ? true
-                                    : "Invalid file type! Only .png .jpg and .jpeg files are accepted";
+                                    : "Invalid file type! Only .png, .jpg, and .jpeg files are accepted";
                             },
                         })}
                     />
                     {errors.avatar && (
-                        <p className="text-red-600 px-2 mt-1">
-                            {errors.avatar.message}
-                        </p>
+                        <p className="text-red-600">{errors.avatar.message}</p>
                     )}
                     <Button
                         type="submit"
                         disabled={loading}
-                        className="mt-5 disabled:cursor-not-allowed py-2 rounded-lg"
-                        bgColor={loading ? "bg-blue-800" : "bg-blue-600"}
+                        className="py-2 rounded-lg"
+                        bgColor={loading ? "bg-indigo-800" : "bg-indigo-600"}
                     >
                         {loading ? <span>{icons.loading}</span> : "Sign Up"}
                     </Button>
                 </form>
-
-                <div className="flex items-center justify-center gap-2 mt-5"> 
+                <div className="flex items-center justify-center gap-2 mt-5">
                     <GoogleLogin />
                 </div>
-               
             </div>
-        // </div>
+        </div>
     );
 }
 

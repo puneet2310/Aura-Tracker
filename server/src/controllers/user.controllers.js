@@ -367,7 +367,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
-  const { fullName, email } = req.body;
+  const { userName, fullName, email } = req.body;
 
   if (!fullName || !email) {
     throw new ApiError(400, "Full name and email are required");
@@ -380,6 +380,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     req.user?._id,
     {
       $set: {
+        userName,
         fullName,
         email,
       },
@@ -419,6 +420,57 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, user, "Avatar updated successfully"));
 });
+const calculateAcadAura = asyncHandler(async (req, res) => {
+  const userId = req.user._id; 
+
+  const completedGoals = await User.aggregate([
+    {
+      $match: { _id: userId } // Match the specific user
+    },
+    {
+      $lookup: {
+        from: 'academicgoals',         // The name of your academic goals collection
+        localField: 'academicGoals',  // The field in the User collection that contains the goal IDs
+        foreignField: '_id',         // The field in the AcademicGoals collection that contains the ID
+        as: 'goals'                 // Name of the new array to hold the joined documents
+      }
+    },
+    {
+      $unwind: {
+        path: '$goals',
+        preserveNullAndEmptyArrays: true // Preserve users even if they have no goals
+      }
+    },
+    {
+      $match: {
+        'goals.isComplete': true // Filter for completed goals
+      }
+    },
+    {
+      $count: 'goalsCompleted' // Count the number of completed goals
+    }
+  ]);
+
+  // Extract the count if there are any completed goals
+  console.log(completedGoals)
+  let goalsCompleted = completedGoals.length > 0 ? completedGoals[0].goalsCompleted : 0;
+
+  console.log("Number of goals completed: ", goalsCompleted);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, goalsCompleted, "No of goals completed: " + goalsCompleted));
+});
+
+const leaderboard = asyncHandler(async (req, res) => {
+  const users = await User.find({}).sort({ acadAura: -1 });  
+  console.log("LeaderBoard: ",users)
+  
+  return res
+    .status(200)
+    .json(new ApiResponse(200, users, "Leaderboard fetched successfully"));
+
+})
 
 export {
   registerUser,
@@ -429,5 +481,7 @@ export {
   getCurrentUser,
   updateAccountDetails,
   updateUserAvatar,
-  googleLogin
+  googleLogin,
+  calculateAcadAura,
+  leaderboard
 };

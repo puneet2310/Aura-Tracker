@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components';
 import { ArrowRightIcon } from '@heroicons/react/solid';
+import axiosInstance from '../utils/axios.helper';
+import AcadLeaderBoard from '../components/LeaderBoard/AcadLeaderBoard';
 
 function Home() {
   const [loading, setLoading] = useState(false);
@@ -10,104 +12,109 @@ function Home() {
   const authStatus = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const fullMessage =
     "Aura Tracker helps you manage tasks efficiently, keep track of your goals, and stay organized. Start by exploring your dashboard and setting up your tasks for the day!";
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      setLoading(true);
-      try {
-        setUser(userData.fullName);
-      } catch (error) {
-        console.log('Error fetching user data:', error);
-      } finally {
-        setLoading(false);
+    useEffect(() => {
+      const fetchUserData = async () => {
+        setLoading(true);
+        try {
+          setUser(userData.fullName);
+    
+          // Fetch all goals
+          
+        } catch (error) {
+          console.log('Error fetching user data:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+    
+      if (authStatus) {
+        fetchUserData();
       }
-    };
-
-    if (authStatus) {
-      fetchUserData();
-    }
-  }, [authStatus]);
+    }, [authStatus, userData]);
+    
 
   const handleDashboard = () => {
     navigate(authStatus ? '/dashboard' : '/login');
   };
+
   const handleAcademicGoals = () => {
     navigate(authStatus ? '/all-acad-goals' : '/login');
   };
 
   return (
-    <div className="min-h-screen  items-center justify-start p-8 text-center space-y-12">
+    <div className="min-h-screen  items-start p-8 text-center bg-gray-100">
       {loading ? (
-        <p className="text-gray-200 animate-pulse">Loading...</p>
+        <p className="text-gray-500 animate-pulse">Loading...</p>
       ) : (
         <>
-          {/* Welcome Section */}
-          <div className=" w-full flex flex-col items-center space-y-4 mt-24">
-            <h2 className="text-5xl font-bold">
-              Welcome <span className="font-extrabold">{user || 'You'}</span> to Aura Tracker
-            </h2>
-            <p className="text-lg text-gray-700 max-w-2xl">{fullMessage}</p>
-            <Button
-              label="Dashboard"
-              className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
-              onClick={handleDashboard}
-            >
-              Go to Dashboard
-              <ArrowRightIcon className="h-5 w-5 ml-2 text-white transition-opacity duration-300 opacity-50 group-hover:opacity-100" />
-            </Button>
-          </div>
+          {/* Left Side Content */}
+          <div className="flex-1 flex flex-col items-center justify-start space-y-12 md:pr-8">
 
-          {/* Spacer to push the academic goals section further down */}
-          <div className="min-h-20 w-full"></div>
+            {/* Welcome Section */}
+            <div className="flex flex-col items-center space-y-4 mt-12">
+              <h2 className="text-5xl font-bold text-gray-800">
+                Welcome <span className="font-extrabold text-indigo-600">{user || 'You'}</span> to Pro-Track!
+              </h2>
+              <p className="text-lg text-gray-700 max-w-2xl">{fullMessage}</p>
+              <Button
+                label="Dashboard"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
+                onClick={handleDashboard}
+              >
+                Go to Dashboard
+                <ArrowRightIcon className="h-5 w-5 ml-2" />
+              </Button>
+            </div>
 
-          {/* Academic Goals Section */}
-          <div className=' flex items-center justify-center'>
-            <div className="w-1/2 p-6 shadow-lg rounded-lg text-left">
+            {/* Academic Goals Card */}
+            <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-xl text-left">
               <h2 className="text-center text-2xl font-bold text-gray-800 mb-2">Set Your Academic Goals</h2>
               <p className="text-center text-gray-600 mb-4">
-                Achieve your potential by setting clear academic goals. Track your progress, stay focused, and reach
-                new heights!
+                Achieve your potential by setting clear academic goals. Track your progress, stay focused, and reach new heights!
               </p>
               {authStatus ? (
                 <Button
                   label="Academic Goals"
-                  className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
                   onClick={handleAcademicGoals}
                 >
                   Go to Academic Goals
-                  <ArrowRightIcon className="h-5 w-5 ml-2 text-white transition-opacity duration-300 opacity-50 group-hover:opacity-100" />
+                  <ArrowRightIcon className="h-5 w-5 ml-2" />
                 </Button>
               ) : (
-                <p className="text-sm italic text-gray-500">
+                <p className="text-sm italic text-gray-500 text-center">
                   Log in to start setting and tracking your academic goals.
                 </p>
               )}
             </div>
+          </div>
 
-            {/* Academic Goals Section */}
-            <div className="w-1/2 p-6 shadow-lg rounded-lg text-left">
-              <h2 className="text-center text-2xl font-bold text-gray-800 mb-2">Set Your Academic Goals</h2>
-              <p className="text-center text-gray-600 mb-4">
-                Achieve your potential by setting clear academic goals. Track your progress, stay focused, and reach
-                new heights!
-              </p>
-              {authStatus ? (
-                <Button
-                  label="Academic Goals"
-                  className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
-                  onClick={handleAcademicGoals}
-                >
-                  Go to Academic Goals
-                  <ArrowRightIcon className="h-5 w-5 ml-2 text-white transition-opacity duration-300 opacity-50 group-hover:opacity-100" />
-                </Button>
-              ) : (
-                <p className="text-sm italic text-gray-500">
-                  Log in to start setting and tracking your academic goals.
-                </p>
-              )}
+          {/* Leaderboard */}
+          <h2 className="mt-16 text-2xl font-bold text-gray-800 text-center mb-4">Leaderboard</h2>
+          <div className='flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-8'>
+            <div className="md:w-1/3 w-full mt-12 md:mt-0 ">
+              <div className="bg-white shadow-lg rounded-lg p-6">
+                <AcadLeaderBoard />
+              </div>
+            </div>
+            
+            <div className="md:w-1/3 w-full mt-12 md:mt-0">
+              
+              <div className="bg-white shadow-lg rounded-lg p-6">
+                <AcadLeaderBoard />
+              </div>
+            </div>
+
+            <div className="md:w-1/3 w-full mt-12 md:mt-0">
+             
+              <div className="bg-white shadow-lg rounded-lg p-6">
+                <AcadLeaderBoard />
+              </div>
             </div>
           </div>
         </>

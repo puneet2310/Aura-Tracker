@@ -48,7 +48,7 @@ function GoogleLogin() {
 
     return (
         <Button
-            className="flex items-center justify-center p-2 border border-gray-300 rounded-lg hover:bg-blue-800 transition-colors min-w-80"
+            className="flex items-center justify-center p-2 border border-gray-300 rounded-lg hover:bg-indigo-800 transition-colors min-w-80"
             onClick={googleLogin}
             aria-label="Sign up with Google"
         >
