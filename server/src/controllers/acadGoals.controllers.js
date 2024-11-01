@@ -109,7 +109,7 @@ const updateAcadGoal = asyncHandler(async (req, res) => {
 const deleteAcadGoal = asyncHandler(async (req, res) => {
     console.log("Req.user :", req.user)
 
-    const {id} = req.body
+    const {id, status} = req.body
     console.log("Id to be deleted :", id)
 
     const goal = await AcademicGoals.findByIdAndDelete(id)
@@ -120,10 +120,19 @@ const deleteAcadGoal = asyncHandler(async (req, res) => {
         req.user._id, 
         {
             $pull: {academicGoals: id} ,
-            $inc: { acadAura: -10 } // Decrement acadAura by 10
         },
         {new: true} //Returns the updated document after the update is applied, Without this, it would return the document before modification
     )
+
+    if(status === "Completed"){
+        await User.findByIdAndUpdate(
+            req.user._id,
+            {
+                $inc: { acadAura: -10 } // Decrement acadAura by 10
+            },
+            { new: true }
+        );
+    }
 
     console.log("Updated goals :", updatedGoals)
     console.log("Deleted goal successfully")

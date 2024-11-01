@@ -119,7 +119,7 @@ function AllAcadGoals() {
     const handleDeleteGoalConfirmed = async (index) => {
         const goalToDelete = goals[index];
         try {
-            await axiosInstance.delete(`/acadGoals/delete-acad-goal`, { data: { id: goalToDelete._id } });
+            await axiosInstance.delete(`/acadGoals/delete-acad-goal`, { data: { id: goalToDelete._id , status: goalToDelete.status } });
             setGoals((prevGoals) => prevGoals.filter((_, i) => i !== index));
             openNotification('success', 'Goal deleted successfully');
         } catch (error) {
