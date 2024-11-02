@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import Button from '../Button';
 
-function AcademicGoals({ academicGoals }) {
+function AcademicGoals({ academicGoals = [] }) {
+    console.log("Academic Goals: ", academicGoals);
+
+    const options = ['All', 'Active', 'Completed', 'Missed'];
+    const [selectedOption, setSelectedOption] = useState(options[0]);
+    const [goals, setGoals] = useState(academicGoals);
+
     const [showGoals, setShowGoals] = useState(false);
     const navigate = useNavigate();
 
@@ -11,7 +17,19 @@ function AcademicGoals({ academicGoals }) {
         setShowGoals((prev) => !prev);
     };
 
-    console.log("Academic Goals are: ", academicGoals);
+    const onOptionChange = (option) => {
+        setSelectedOption(option);
+    };
+
+    useEffect(() => {
+        if (selectedOption === 'All') {
+            setGoals(academicGoals);
+        } else {
+            const filteredGoals = academicGoals.filter((goal) => goal.status === selectedOption);
+            setGoals(filteredGoals);
+        }
+    }, [academicGoals, selectedOption]);
+
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-md">
@@ -28,11 +46,26 @@ function AcademicGoals({ academicGoals }) {
 
             {showGoals && (
                 <>
-                    <p className="text-gray-600 mt-4">Your academic goals help track your progress and keep you focused on your studies.</p>
+                    <p className="text-gray-600 mt-4">
+                        Your academic goals help track your progress and keep you focused on your studies.
+                    </p>
+
+                    <div>
+                        <select
+                            className="rounded-lg px-1 py-1 bg-gray-100 cursor-pointer outline-none"
+                            value={selectedOption}
+                            onChange={(e) => onOptionChange(e.target.value)}
+                        >
+                            {options.map((option) => (
+                                <option key={option} value={option}>{option}</option>
+                            ))}
+                        </select>
+                    </div>
+
                     <div className="mt-4">
-                        {academicGoals.length > 0 ? (
+                        {goals.length > 0 ? (
                             <ul className="space-y-4">
-                                {academicGoals.map((goal, index) => (
+                                {goals.map((goal, index) => (
                                     <li
                                         key={index}
                                         className="bg-gray-100 p-4 rounded-lg shadow-md hover:bg-gray-200 transition transform hover:-translate-y-1"
@@ -54,7 +87,9 @@ function AcademicGoals({ academicGoals }) {
                                 ))}
                             </ul>
                         ) : (
-                            <p className="text-gray-600 mt-4">No academic goals set yet.</p>
+                            <p className="text-center text-gray-600 mt-4">
+                                {selectedOption === 'All' ? 'No academic goals set yet.' : `No ${selectedOption} goals found.`}
+                            </p>
                         )}
 
                         <Button
