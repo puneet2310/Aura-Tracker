@@ -15,7 +15,7 @@ function Home() {
   const dispatch = useDispatch();
 
   const fullMessage =
-    "Aura Tracker helps you manage tasks efficiently, keep track of your goals, and stay organized. Start by exploring your dashboard and setting up your tasks for the day!";
+    "Pro-Track helps you manage tasks efficiently, keep track of your goals, and stay organized. Start by exploring your dashboard and setting up your tasks for the day!";
 
     useEffect(() => {
       const fetchUserData = async () => {
@@ -99,21 +99,39 @@ function Home() {
           <div className='flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-8'>
             <div className="md:w-1/3 w-full mt-12 md:mt-0 ">
               <div className="bg-white shadow-lg rounded-lg p-6">
-                <AcadLeaderBoard />
+                {authStatus ? (
+                  <AcadLeaderBoard />
+                ) : (
+                  <p className="text-sm italic text-gray-500 text-center">
+                    Log in to view the leaderboard.
+                  </p>
+                )}
               </div>
             </div>
             
             <div className="md:w-1/3 w-full mt-12 md:mt-0">
               
               <div className="bg-white shadow-lg rounded-lg p-6">
-                <AcadLeaderBoard />
+              {authStatus ? (
+                  <AcadLeaderBoard />
+                ) : (
+                  <p className="text-sm italic text-gray-500 text-center">
+                    Log in to view the leaderboard.
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="md:w-1/3 w-full mt-12 md:mt-0">
              
               <div className="bg-white shadow-lg rounded-lg p-6">
-                <AcadLeaderBoard />
+              {authStatus ? (
+                  <AcadLeaderBoard />
+                ) : (
+                  <p className="text-sm italic text-gray-500 text-center">
+                    Log in to view the leaderboard.
+                  </p>
+                )}
               </div>
             </div>
           </div>

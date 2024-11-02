@@ -79,7 +79,7 @@ function Dashboard() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto my-8 p-6 bg-gray-800 text-white rounded-lg shadow-lg">
+    <div className="max-w-4xl mx-auto my-8 p-6 text-black rounded-lg shadow-lg">
       <h2 className="text-3xl font-semibold text-center mb-6">Dashboard</h2>
 
       {loading ? (

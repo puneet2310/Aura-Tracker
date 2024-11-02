@@ -52,9 +52,11 @@ function SignUp() {
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-900">
             <div className="bg-white shadow-md rounded-lg p-6 max-w-md w-full">
                 <div className="text-center mb-4">
-                    <Link to="/">
-                        <Logo width="76" />
-                    </Link>
+                    <div className="flex justify-center mb-4">
+                        <Link to="/">
+                            <Logo width="76" />
+                        </Link>
+                    </div>
                     <h1 className="text-2xl font-bold mt-2">Create an Account</h1>
                     <h6 className="mt-1">
                         Already have an Account?{" "}

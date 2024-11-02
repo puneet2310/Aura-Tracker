@@ -19,7 +19,7 @@ function AcademicGoals({ academicGoals }) {
                 <h4 className="text-xl font-semibold text-gray-800">Academic Goals</h4>
                 <Button
                     onClick={toggleGoals}
-                    className="flex items-center bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+                    className="flex items-center bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-300"
                 >
                     {showGoals ? <FaChevronUp className="mr-2" /> : <FaChevronDown className="mr-2" />}
                     {showGoals ? 'Hide Goals' : 'Show Goals'}
@@ -59,13 +59,13 @@ function AcademicGoals({ academicGoals }) {
 
                         <Button
                             onClick={() => navigate('/all-acad-goals')}
-                            className="mt-6 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300 block mx-auto"
+                            className="mt-6 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-300 block mx-auto"
                         >
                             Edit Academic Goals
                         </Button>
                         <Button
                             onClick={() => navigate('/set-acad-goals')}
-                            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300 block mx-auto"
+                            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-300 block mx-auto"
                         >
                             Add Academic Goals
                         </Button>

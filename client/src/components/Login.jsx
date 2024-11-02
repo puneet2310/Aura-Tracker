@@ -55,7 +55,7 @@ function Login() {
                 <div className="mb-6 flex justify-center">
                     <Logo width="80px" />
                 </div>
-                <h2 className="text-center text-3xl font-extrabold text-gray-800">
+                <h2 className="text-center text-3xl font-semibold text-gray-800">
                     Sign in to Pro-Track
                 </h2>
                 <p className="mt-2 text-center text-sm text-gray-600">
