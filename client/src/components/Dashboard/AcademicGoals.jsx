@@ -4,33 +4,48 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../Button';
 
 function AcademicGoals({ academicGoals = [] }) {
-    console.log("Academic Goals: ", academicGoals);
-
-    const options = ['All', 'Active', 'Completed', 'Missed'];
-    const [selectedOption, setSelectedOption] = useState(options[0]);
-    const [goals, setGoals] = useState(academicGoals);
-
+    const optionsStatus = ['All', 'Active', 'Completed', 'Missed'];
+    const optionsSort = ['All', 'Title', 'Description', 'Due Date'];
+    
+    const [selectedStatus, setSelectedStatus] = useState(optionsStatus[0]);
+    const [selectedSort, setSelectedSort] = useState(optionsSort[0]);
+    const [goals, setGoals] = useState([]);
     const [showGoals, setShowGoals] = useState(false);
+    
     const navigate = useNavigate();
 
-    const toggleGoals = () => {
-        setShowGoals((prev) => !prev);
-    };
+    const toggleGoals = () => setShowGoals((prev) => !prev);
 
-    const onOptionChange = (option) => {
-        setSelectedOption(option);
-    };
+    const onOptionStatusChange = (option) => setSelectedStatus(option);
+    const onOptionSortChange = (option) => setSelectedSort(option);
 
     useEffect(() => {
-        if (selectedOption === 'All') {
-            setGoals(academicGoals);
-        } else {
-            const filteredGoals = academicGoals.filter((goal) => goal.status === selectedOption);
-            setGoals(filteredGoals);
+       
+        let updatedGoals = [...academicGoals];
+
+        // Filter goals based on the selected status
+        if (selectedStatus !== 'All') {
+            updatedGoals = updatedGoals.filter(goal => goal.status === selectedStatus);
         }
-    }, [academicGoals, selectedOption]);
 
+        // Sort the filtered goals based on selected sort option
+        if (selectedSort === 'Title') {
+            updatedGoals = updatedGoals.sort((a, b) => a.title.localeCompare(b.title));
+        } else if (selectedSort === 'Description') {
+            updatedGoals = updatedGoals.sort((a, b) => a.description.localeCompare(b.description));
+        } else if (selectedSort === 'Due Date') {
+            updatedGoals = updatedGoals.sort((a, b) => new Date(a.targetDate) - new Date(b.targetDate));
+        }
 
+        // Update the state only once with the final, processed list
+        setGoals(updatedGoals);
+    }, [academicGoals, selectedStatus, selectedSort]);
+
+    const getGoalCountByStatus = (status) => {
+        return status === 'All' 
+            ? academicGoals.length 
+            : academicGoals.filter(goal => goal.status === status).length;
+    }
     return (
         <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="flex justify-between items-center">
@@ -50,13 +65,30 @@ function AcademicGoals({ academicGoals = [] }) {
                         Your academic goals help track your progress and keep you focused on your studies.
                     </p>
 
-                    <div>
+                    <div className="flex gap-4 mt-6 mb-4">
+                        {optionsStatus.map(status => (
+                            <button
+                                key={status}
+                                onClick={() => onOptionStatusChange(status)}
+                                className={`flex flex-col items-center justify-center p-4 rounded-lg shadow-sm transition-all ${
+                                    selectedStatus === status 
+                                        ? 'bg-indigo-500 text-white' 
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                }`}
+                            >
+                                <span className="text-2xl font-bold">{getGoalCountByStatus(status)}</span>
+                                <span className="text-sm mt-1">{status}</span>
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className='flex justify-end mr-4 gap-5'>
                         <select
-                            className="rounded-lg px-1 py-1 bg-gray-100 cursor-pointer outline-none"
-                            value={selectedOption}
-                            onChange={(e) => onOptionChange(e.target.value)}
+                            className="rounded-3xl mt-2 px-2 py-2 bg-gray-100 cursor-pointer outline-none"
+                            value={selectedSort}
+                            onChange={(e) => onOptionSortChange(e.target.value)}
                         >
-                            {options.map((option) => (
+                            {optionsSort.map(option => (
                                 <option key={option} value={option}>{option}</option>
                             ))}
                         </select>
@@ -64,11 +96,11 @@ function AcademicGoals({ academicGoals = [] }) {
 
                     <div className="mt-4">
                         {goals.length > 0 ? (
-                            <ul className="space-y-4">
+                            <ul className="space-y-4 overflow-y-auto max-h-96">
                                 {goals.map((goal, index) => (
                                     <li
                                         key={index}
-                                        className="bg-gray-100 p-4 rounded-lg shadow-md hover:bg-gray-200 transition transform hover:-translate-y-1"
+                                        className="bg-gray-100 p-4 overflow-auto rounded-lg shadow-md hover:bg-gray-200 transition transform hover:-translate-y-1"
                                     >
                                         <h5 className="text-lg font-semibold text-gray-800">{goal.title}</h5>
                                         <p className="text-gray-600 mt-1">{goal.description}</p>
@@ -88,7 +120,7 @@ function AcademicGoals({ academicGoals = [] }) {
                             </ul>
                         ) : (
                             <p className="text-center text-gray-600 mt-4">
-                                {selectedOption === 'All' ? 'No academic goals set yet.' : `No ${selectedOption} goals found.`}
+                                {selectedStatus === 'All' ? 'No academic goals set yet.' : `No ${selectedStatus} goals found.`}
                             </p>
                         )}
 
@@ -102,7 +134,7 @@ function AcademicGoals({ academicGoals = [] }) {
                             onClick={() => navigate('/set-acad-goals')}
                             className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-300 block mx-auto"
                         >
-                            Add Academic Goals
+                            Set New Academic Goals
                         </Button>
                     </div>
                 </>
