@@ -16,7 +16,7 @@
 - User's can see his/her on the Leaderrboard
 - Real time updation of the leaderboard and user's progress
 - If goals is out of date, it will be automatically detected and set as "Missed" 
-
+- Filter the goals based on the status and date
 
 ### Technologies Used:
 - The project has been made using the React Framework with the styling features using Tailwind CSS.
