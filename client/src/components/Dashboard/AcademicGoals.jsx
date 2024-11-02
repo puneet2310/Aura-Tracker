@@ -5,7 +5,7 @@ import Button from '../Button';
 
 function AcademicGoals({ academicGoals = [] }) {
     const optionsStatus = ['All', 'Active', 'Completed', 'Missed'];
-    const optionsSort = ['All', 'Title', 'Description', 'Due Date'];
+    const optionsSort = ['None', 'Title', 'Description', 'Due Date'];
     
     const [selectedStatus, setSelectedStatus] = useState(optionsStatus[0]);
     const [selectedSort, setSelectedSort] = useState(optionsSort[0]);
