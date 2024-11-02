@@ -6,19 +6,22 @@ import { openNotification } from '../Notification/antd';
 import Swal from 'sweetalert2';
 
 function AllAcadGoals() {
+    const optionsStatus = ['All', 'Active', 'Completed', 'Missed'];
     const [goals, setGoals] = useState([]);
     const [loading, setLoading] = useState(false);
     const [editableGoalIndex, setEditableGoalIndex] = useState(null);
 
     const authStatus = useSelector((state) => state.auth.status);
     const userData = useSelector((state) => state.auth.userData);
+    const [selectedStatus , setSelectedStatus] = useState(optionsStatus[0]);
 
+    let allGoals, userGoals;
     useEffect(() => {
         const fetchGoals = async () => {
             setLoading(true);
             try {
                 const response = await axiosInstance.get('/acadGoals/get-acad-goals');
-                const userGoals = response.data.data.map(goal => ({
+                userGoals = response.data.data.map(goal => ({
                     _id: goal._id,
                     title: goal.title,
                     description: goal.description,
@@ -26,7 +29,19 @@ function AllAcadGoals() {
                     isComplete: goal.isComplete,
                     status: goal.status,
                 }));
-                setGoals(userGoals);
+                console.log("User goals: ", userGoals)
+                
+                if (selectedStatus !== 'All') {
+                    const updatedGoals = userGoals.filter(goal => goal.status === selectedStatus);
+                    setGoals(updatedGoals);
+                    console.log("User goals: ", goals)
+                }
+                else { 
+                    allGoals = userGoals
+                    setGoals(userGoals)
+                    console.log("User goals: ", userGoals)
+                }
+
             } catch (error) {
                 console.log('Error fetching goals:', error);
             } finally {
@@ -37,7 +52,7 @@ function AllAcadGoals() {
         if (authStatus) {
             fetchGoals();
         }
-    }, [authStatus, userData]);
+    }, [authStatus, userData, selectedStatus]);
 
     const handleEditClick = (index) => {
         if(goals[index].status === 'Completed') {
@@ -142,6 +157,8 @@ function AllAcadGoals() {
         });
     };
 
+    const onOptionStatusChange = (option) => setSelectedStatus(option);
+
     return (
         <div className="min-h-screen flex flex-col items-center justify-start p-8 bg-gradient-to-br from-indigo-100 to-indigo-300">
             <h1 className="text-4xl font-bold mb-4 text-indigo-700">Academic Goals</h1>
@@ -156,12 +173,28 @@ function AllAcadGoals() {
                     <li>Delete a goal by clicking the delete icon if it's no longer needed.</li>
                 </ul>
             </div>
+
+            <div className="flex gap-4 mt-6 mb-4">
+                {optionsStatus.map(status => (
+                    <button
+                        key={status}
+                        onClick={() => onOptionStatusChange(status)}
+                        className={`flex flex-col items-center justify-center p-4 rounded-lg shadow-sm transition-all ${
+                            selectedStatus === status 
+                                ? 'bg-indigo-500 text-white' 
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                    >
+                        <div className="rounded-xl hover:scale-105 text-sm font-bold mt-1">{status}</div>
+                    </button>
+                ))}
+            </div>
     
-            <div className="w-full max-w-4xl space-y-8">
+            <div className=" w-full max-w-4xl space-y-8">
                 {goals.map((goal, index) => (
                     <div
                         key={index}
-                        className={`relative p-8 rounded-lg shadow-md transition duration-300 transform hover:scale-105 ${goal.status === 'Completed' ? 'bg-green-100' : goal.status === 'Missed' ? 'bg-red-100' : 'bg-white'}`}
+                        className={`overflow-auto relative p-8 rounded-lg shadow-md transition duration-300 transform hover:scale-105 ${goal.status === 'Completed' ? 'bg-green-100' : goal.status === 'Missed' ? 'bg-red-100' : 'bg-white'}`}
                     >
                         <div className="absolute top-4 right-4 flex items-center text-yellow-500">
                             <FaCoins size={20} />
