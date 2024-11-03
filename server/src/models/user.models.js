@@ -39,10 +39,13 @@ const userSchema = new Schema(
             trim: true, 
             index: true
         },
+        stream: {
+            type: String,
+            required: true
+        },
         avatar: {
             type: String, //cloudinary url
             // required: true,
-            
         }, 
         password: {
             type: String,
