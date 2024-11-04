@@ -3,17 +3,14 @@ import { Container, Logo, LogoutButton } from '../index';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import DropdownMenu from './DropdownMenu';
-// import './Header.css'
-// import {Container, Logo, LogoutButton} from '../index.js'
+
 function Header() {
   const authStatus = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
-  
-  console.log(userData)
-  const avatar = userData?.avatar;
-  console.log(avatar)
+
+  const avatar = userData?.avatar || '/path/to/default-avatar.png'; // Fallback for avatar
   const navItems = [
     {
       name: 'Home',
@@ -22,7 +19,7 @@ function Header() {
     },
     {
       name: 'About Us',
-      slug: '/about-us',
+      slug: '/about',
       active: true,
     },
     {
@@ -42,6 +39,7 @@ function Header() {
     },
   ];
 
+  const isActive = (slug) => window.location.pathname === slug; // Check if the route is active
 
   return (
     <header className='py-3 shadow bg-gray-900'>
@@ -57,8 +55,10 @@ function Header() {
               <li key={item.name} className='relative'>
                 <button
                   onClick={() => navigate(item.slug)}
-                  className='inline-block px-6 py-2 transition duration-200 transform hover:scale-90
-                   hover:bg-slate-600 hover:text-white rounded-full text-gray-300'
+                  className={`inline-block px-6 py-2 transition duration-200 transform hover:scale-90 hover:bg-slate-600 rounded-full ${
+                    isActive(item.slug) ? 'bg-slate-600 text-white' : 'text-gray-300'
+                  }`}
+                  aria-label={`Navigate to ${item.name}`} // Accessibility improvement
                 >
                   {item.name}
                 </button>
@@ -75,7 +75,7 @@ function Header() {
                 <button onClick={() => setShowDropdown(!showDropdown)} className='focus:outline-none'>
                   <img
                     src={avatar}
-                    alt=''
+                    alt='User avatar' // Improved alt text for accessibility
                     className='w-10 h-10 rounded-full object-cover border border-gray-400'
                   />
                 </button>
