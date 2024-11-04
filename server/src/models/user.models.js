@@ -41,7 +41,7 @@ const userSchema = new Schema(
         },
         stream: {
             type: String,
-            required: true
+            required: false
         },
         avatar: {
             type: String, //cloudinary url
