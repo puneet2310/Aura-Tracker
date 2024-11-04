@@ -17,26 +17,26 @@ function Home() {
   const fullMessage =
     "Pro-Track helps you manage tasks efficiently, keep track of your goals, and stay organized. Start by exploring your dashboard and setting up your tasks for the day!";
 
-    useEffect(() => {
-      const fetchUserData = async () => {
-        setLoading(true);
-        try {
-          setUser(userData.fullName);
-    
-          // Fetch all goals
-          
-        } catch (error) {
-          console.log('Error fetching user data:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-    
-      if (authStatus) {
-        fetchUserData();
+  useEffect(() => {
+    const fetchUserData = async () => {
+      setLoading(true);
+      try {
+        setUser(userData.fullName);
+
+        // Fetch all goals
+
+      } catch (error) {
+        console.log('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
       }
-    }, [authStatus, userData]);
-    
+    };
+
+    if (authStatus) {
+      fetchUserData();
+    }
+  }, [authStatus, userData]);
+
 
   const handleDashboard = () => {
     navigate(authStatus ? '/dashboard' : '/login');
@@ -78,63 +78,41 @@ function Home() {
                 Achieve your potential by setting clear academic goals. Track your progress, stay focused, and reach new heights!
               </p>
               {authStatus ? (
-                <Button
-                  label="Academic Goals"
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
-                  onClick={handleAcademicGoals}
-                >
-                  Go to Academic Goals
-                  <ArrowRightIcon className="h-5 w-5 ml-2" />
-                </Button>
+                <div className="flex justify-center">
+                  <Button
+                    label="Academic Goals"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
+                    onClick={handleAcademicGoals}
+                  >
+                    Go to Academic Goals
+                    <ArrowRightIcon className="h-5 w-5 ml-2" />
+                  </Button>
+                </div>
               ) : (
                 <p className="text-sm italic text-gray-500 text-center">
                   Log in to start setting and tracking your academic goals.
                 </p>
               )}
             </div>
+
           </div>
 
           {/* Leaderboard */}
           <h2 className="mt-16 text-2xl font-bold text-gray-800 text-center mb-4">Leaderboard</h2>
-          <div className='flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-8'>
-            <div className="md:w-1/3 w-full mt-12 md:mt-0 ">
-              <div className="bg-white shadow-lg rounded-lg p-6">
+          <div className="flex justify-center items-center">
+            <div className="w-full md:w-2/3 lg:w-1/2 mt-8">
+              <div className="bg-white shadow-lg rounded-lg p-10"> {/* Increased padding for a wider look */}
                 {authStatus ? (
                   <AcadLeaderBoard />
                 ) : (
-                  <p className="text-sm italic text-gray-500 text-center">
-                    Log in to view the leaderboard.
-                  </p>
-                )}
-              </div>
-            </div>
-            
-            <div className="md:w-1/3 w-full mt-12 md:mt-0">
-              
-              <div className="bg-white shadow-lg rounded-lg p-6">
-              {authStatus ? (
-                  <AcadLeaderBoard />
-                ) : (
-                  <p className="text-sm italic text-gray-500 text-center">
-                    Log in to view the leaderboard.
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="md:w-1/3 w-full mt-12 md:mt-0">
-             
-              <div className="bg-white shadow-lg rounded-lg p-6">
-              {authStatus ? (
-                  <AcadLeaderBoard />
-                ) : (
-                  <p className="text-sm italic text-gray-500 text-center">
+                  <p className="text-base italic text-gray-500 text-center"> {/* Slightly larger font size */}
                     Log in to view the leaderboard.
                   </p>
                 )}
               </div>
             </div>
           </div>
+
         </>
       )}
     </div>
