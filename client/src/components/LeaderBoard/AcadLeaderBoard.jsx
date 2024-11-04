@@ -41,7 +41,8 @@ function AcadLeaderBoard() {
                     {leaderboardData?.map((user, index) => (
                         <li
                             key={index}
-                            className={`flex items-center justify-between bg-white border-b last:border-b-0 border-gray-200 hover:bg-indigo-50 hover:shadow-md transition-all duration-300 rounded-lg px-6 py-4 ${currentUser?.userName === user.userName ? 'bg-indigo-100 border-indigo-300' : ''}`}
+                            className={`flex items-center justify-between bg-white border-b last:border-b-0 border-gray-200 hover:bg-indigo-50 hover:shadow-md hover:scale-105 transform transition-transform duration-300 rounded-lg px-6 py-4 ${currentUser?.userName === user.userName ? 'bg-indigo-100 border-indigo-300' : ''
+                                }`}
                         >
                             <div className="flex items-center">
                                 <span className="mr-4 text-2xl">{getMedalIcon(index)}</span>
@@ -59,6 +60,7 @@ function AcadLeaderBoard() {
                 </ul>
             )}
         </div>
+
     );
 }
 
