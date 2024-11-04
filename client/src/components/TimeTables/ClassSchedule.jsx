@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../utils/axios.helper';
 
-const ClassSchedule = ({ branch }) => {
+const ClassSchedule = ({ stream, semester }) => {
     const [schedule, setSchedule] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
+    const times = [
+        '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', 
+        '14:00', '15:00', '16:00', '17:00'
+    ];
+    
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
     useEffect(() => {
         const fetchSchedule = async () => {
             try {
-                const response = await axiosInstance.get(`/timetable/branch`);
-                consoel.log("response")
+                const response = await axiosInstance.get(`/timetable/${stream}/${semester}`);
                 setSchedule(response.data.data);
+                // console.log("Response: ", response.data.data);
             } catch (err) {
                 setError('Error fetching the schedule.');
             } finally {
@@ -20,7 +27,7 @@ const ClassSchedule = ({ branch }) => {
         };
 
         fetchSchedule();
-    }, [branch]);
+    }, [stream]);
 
     if (loading) {
         return <div className="text-center">Loading...</div>;
@@ -30,24 +37,58 @@ const ClassSchedule = ({ branch }) => {
         return <div className="text-red-500 text-center">{error}</div>;
     }
 
+    // Helper function to get the class for a specific day and time
+    const getClassForTime = (day, time) => {
+        const daySchedule = schedule[0].weeklySchedule.find(d => d.day === day);
+        if (daySchedule) {
+            return daySchedule.classes.find(
+                cls => cls.startTime === time
+            );
+        }
+        return null;
+    };
+
+    // Helper to create time ranges for display
+    const getTimeRange = (startTime) => {
+        const [hour, minute] = startTime.split(':').map(Number);
+        const endTime = `${String(hour + 1).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+        return `${startTime} - ${endTime}`;
+    };
+
     return (
-        <div className="max-w-2xl mx-auto my-8 p-4 border border-gray-300 rounded shadow-lg">
-            <h2 className="text-2xl font-bold text-center mb-4">Class Schedule for {branch}</h2>
+        <div className="max-w-fit mx-auto my-8 p-4 border border-gray-300 rounded shadow-lg">
+            <h2 className="text-2xl font-bold text-center mb-4">Class Schedule for {stream} ( {semester} )</h2>
             {schedule ? (
                 <table className="min-w-full border border-gray-300">
                     <thead>
                         <tr className="bg-gray-100">
-                            <th className="py-2 px-4 border border-gray-300">Day</th>
-                            <th className="py-2 px-4 border border-gray-300">Time</th>
-                            <th className="py-2 px-4 border border-gray-300">Subject</th>
+                            <th className="py-2 px-4 border border-gray-300">Day/Time</th>
+                            {times.map((time, index) => (
+                                <th key={index} className="py-2 px-4 border border-gray-300">
+                                    {getTimeRange(time)}
+                                </th>
+                            ))}
                         </tr>
                     </thead>
                     <tbody>
-                        {schedule.classes.map((item, index) => (
-                            <tr key={index} className="hover:bg-gray-50">
-                                <td className="py-2 px-4 border border-gray-300">{item.day}</td>
-                                <td className="py-2 px-4 border border-gray-300">{item.time}</td>
-                                <td className="py-2 px-4 border border-gray-300">{item.subject}</td>
+                        {days.map((day, dayIndex) => (
+                            <tr key={dayIndex}>
+                                <td className="py-2 px-4 border border-gray-300 font-bold">{day}</td>
+                                {times.map((time, timeIndex) => {
+                                    const classInfo = getClassForTime(day, time);
+                                    return (
+                                        <td key={timeIndex} className="py-2 px-4 border border-gray-300 text-center">
+                                            {classInfo ? (
+                                                <>
+                                                    <div>{classInfo.subject}</div>
+                                                    <div className="text-sm text-gray-500">{classInfo.instructor}</div>
+                                                </>
+                                            ) : (
+                                                <div className="text-gray-400">---</div>
+                                            )}
+                                        </td>
+                                    );
+                                })}
                             </tr>
                         ))}
                     </tbody>

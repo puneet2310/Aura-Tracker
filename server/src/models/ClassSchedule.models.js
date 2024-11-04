@@ -1,7 +1,12 @@
 import mongoose from 'mongoose'
 
 const classScheduleSchema = new mongoose.Schema({
-  branch: {
+  
+  semester: {
+    type: String,
+    required: true,
+  },
+  stream: {
     type: String,
     required: true,
   },

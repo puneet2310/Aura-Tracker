@@ -6,6 +6,7 @@ import acadGoalsRoute from "./routes/acadGoals.routes.js"
 import timeTableRouter from "./routes/timetable.routes.js"
 import { errorHandler } from "./middlewares/error.middlewares.js"
 import dotenv from "dotenv"
+import seedDatabase from "./seed.js"
 
 dotenv.config({
     path: "./.env"
@@ -20,6 +21,8 @@ app.use(
         credentials: true
     })
 )
+
+seedDatabase()
 
 app.use(express.json({limit: "16kb"}))
 
