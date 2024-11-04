@@ -99,45 +99,20 @@ function Home() {
 
           {/* Leaderboard */}
           <h2 className="mt-16 text-2xl font-bold text-gray-800 text-center mb-4">Leaderboard</h2>
-          <div className='flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-8'>
-            <div className="md:w-1/3 w-full mt-12 md:mt-0 ">
-              <div className="bg-white shadow-lg rounded-lg p-6">
+          <div className="flex justify-center items-center">
+            <div className="w-full md:w-2/3 lg:w-1/2 mt-8">
+              <div className="bg-white shadow-lg rounded-lg p-10"> {/* Increased padding for a wider look */}
                 {authStatus ? (
                   <AcadLeaderBoard />
                 ) : (
-                  <p className="text-sm italic text-gray-500 text-center">
-                    Log in to view the leaderboard.
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="md:w-1/3 w-full mt-12 md:mt-0">
-
-              <div className="bg-white shadow-lg rounded-lg p-6">
-                {authStatus ? (
-                  <AcadLeaderBoard />
-                ) : (
-                  <p className="text-sm italic text-gray-500 text-center">
-                    Log in to view the leaderboard.
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="md:w-1/3 w-full mt-12 md:mt-0">
-
-              <div className="bg-white shadow-lg rounded-lg p-6">
-                {authStatus ? (
-                  <AcadLeaderBoard />
-                ) : (
-                  <p className="text-sm italic text-gray-500 text-center">
+                  <p className="text-base italic text-gray-500 text-center"> {/* Slightly larger font size */}
                     Log in to view the leaderboard.
                   </p>
                 )}
               </div>
             </div>
           </div>
+
         </>
       )}
     </div>
