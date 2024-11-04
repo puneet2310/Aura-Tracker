@@ -17,26 +17,26 @@ function Home() {
   const fullMessage =
     "Pro-Track helps you manage tasks efficiently, keep track of your goals, and stay organized. Start by exploring your dashboard and setting up your tasks for the day!";
 
-    useEffect(() => {
-      const fetchUserData = async () => {
-        setLoading(true);
-        try {
-          setUser(userData.fullName);
-    
-          // Fetch all goals
-          
-        } catch (error) {
-          console.log('Error fetching user data:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-    
-      if (authStatus) {
-        fetchUserData();
+  useEffect(() => {
+    const fetchUserData = async () => {
+      setLoading(true);
+      try {
+        setUser(userData.fullName);
+
+        // Fetch all goals
+
+      } catch (error) {
+        console.log('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
       }
-    }, [authStatus, userData]);
-    
+    };
+
+    if (authStatus) {
+      fetchUserData();
+    }
+  }, [authStatus, userData]);
+
 
   const handleDashboard = () => {
     navigate(authStatus ? '/dashboard' : '/login');
@@ -78,20 +78,23 @@ function Home() {
                 Achieve your potential by setting clear academic goals. Track your progress, stay focused, and reach new heights!
               </p>
               {authStatus ? (
-                <Button
-                  label="Academic Goals"
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
-                  onClick={handleAcademicGoals}
-                >
-                  Go to Academic Goals
-                  <ArrowRightIcon className="h-5 w-5 ml-2" />
-                </Button>
+                <div className="flex justify-center">
+                  <Button
+                    label="Academic Goals"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
+                    onClick={handleAcademicGoals}
+                  >
+                    Go to Academic Goals
+                    <ArrowRightIcon className="h-5 w-5 ml-2" />
+                  </Button>
+                </div>
               ) : (
                 <p className="text-sm italic text-gray-500 text-center">
                   Log in to start setting and tracking your academic goals.
                 </p>
               )}
             </div>
+
           </div>
 
           {/* Leaderboard */}
@@ -108,11 +111,11 @@ function Home() {
                 )}
               </div>
             </div>
-            
+
             <div className="md:w-1/3 w-full mt-12 md:mt-0">
-              
+
               <div className="bg-white shadow-lg rounded-lg p-6">
-              {authStatus ? (
+                {authStatus ? (
                   <AcadLeaderBoard />
                 ) : (
                   <p className="text-sm italic text-gray-500 text-center">
@@ -123,9 +126,9 @@ function Home() {
             </div>
 
             <div className="md:w-1/3 w-full mt-12 md:mt-0">
-             
+
               <div className="bg-white shadow-lg rounded-lg p-6">
-              {authStatus ? (
+                {authStatus ? (
                   <AcadLeaderBoard />
                 ) : (
                   <p className="text-sm italic text-gray-500 text-center">
