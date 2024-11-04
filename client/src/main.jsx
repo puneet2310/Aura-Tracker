@@ -52,6 +52,7 @@ const router = createBrowserRouter([
         path: '/about', // Add this route for the About Us page
         element: <AboutUs />,
       },
+      {
         path: '/timetable',
         element: <TimetablePage/>
       }
