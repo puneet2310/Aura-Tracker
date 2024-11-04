@@ -15,6 +15,7 @@ import Dashboard from './components/Dashboard/Dashboard.jsx'
 import SetAcademicGoals from './components/AcademicGoals/SetAcademicGoals.jsx'
 import AllAcadGoals from './components/AcademicGoals/AllAcadGoals.jsx'
 import 'antd/dist/reset.css';
+import TimetablePage from './components/TimeTables/TimetablePage.jsx'
 
 
 const router = createBrowserRouter([
@@ -47,7 +48,8 @@ const router = createBrowserRouter([
         element: <AllAcadGoals />,
       },
       {
-        path: ''
+        path: '/timetable',
+        element: <TimetablePage/>
       }
     ],
   },

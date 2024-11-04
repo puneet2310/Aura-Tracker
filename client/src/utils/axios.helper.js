@@ -4,7 +4,7 @@ import { parseErrorMessage } from "./parseErrorMsg";
 
 const axiosInstance = axios.create({
     baseURL: "http://localhost:3008/api/v1",
-    withCredentials: true,
+    withCredentials: true, //Ensures cookies, including any auth tokens, are sent with each request if needed.
 });
 
 // Request interceptor to add the access token to headers

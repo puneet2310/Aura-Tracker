@@ -20,7 +20,7 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
         const user = await User.findById(decodedToken._id).select("-password -refreshToken") 
 
         if(!user){
-            throw new ApiError(401, "You are not authenticated")
+            throw new ApiError(401, "You are not authenticated");
         }
 
         req.user = user //this will be very useful where i can get directly access to user data
@@ -29,6 +29,12 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
 
     } catch (error) {
         console.log("Error while verifying token", error)
+
+        if (error.name === "TokenExpiredError") {
+            // If the error is due to an expired token, send the expected message
+            throw new ApiError(401, "TokenExpiredError");
+        }
+        
         throw new ApiError(401, "Invalid access token")
     }
 })

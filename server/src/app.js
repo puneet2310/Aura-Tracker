@@ -3,6 +3,7 @@ import cors from "cors"
 import healthCheckRouter from "./routes/healthCheck.routes.js"
 import userRouter from "./routes/user.routes.js"
 import acadGoalsRoute from "./routes/acadGoals.routes.js"
+import timeTableRouter from "./routes/timetable.routes.js"
 import { errorHandler } from "./middlewares/error.middlewares.js"
 import dotenv from "dotenv"
 
@@ -32,6 +33,7 @@ app.use(cookieParser())
 app.use("/api/v1/healthcheck", healthCheckRouter)
 app.use("/api/v1/users",userRouter)
 app.use("/api/v1/acadGoals", acadGoalsRoute)
+app.use("/api/v1/timetable", timeTableRouter)
 
 // app.use(errorHandler)
 
