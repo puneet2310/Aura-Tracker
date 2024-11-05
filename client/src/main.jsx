@@ -19,6 +19,8 @@ import 'antd/dist/reset.css';
 import TimetablePage from './components/TimeTables/TimetablePage.jsx'
 import EditTimetableForm from './components/TimeTables/EditTimetableForm.jsx';
 import Profile from './components/Profile/Profile.jsx';
+import Contact from './components/Contact/Contact.jsx';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -62,7 +64,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/profile',
-        element: <Profile />,
+        element: <Profile />
+      },
+      {
+        path: '/contact',
+        element: <Contact />
       }
     ],
   },
