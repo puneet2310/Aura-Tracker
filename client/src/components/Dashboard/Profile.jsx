@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { FaEdit, FaSave } from 'react-icons/fa';
 import axiosInstance from '../../utils/axios.helper';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login as authLogin } from '../../store/authSlice';
 
 function Profile({ userInfo, academicAura }) {
     const [editField, setEditField] = useState(null);
     const [LocalUserInfo, setLocalUserInfo] = useState(userInfo);
+    const userData = useSelector((state) => state.auth.userData);
     const dispatch = useDispatch();
 
     const handleEdit = async (field) => {
@@ -57,12 +58,12 @@ function Profile({ userInfo, academicAura }) {
                                     borderBottom: '2px solid',
                                 }}
                             />
-                            <button
+                            {/* <button
                                 onClick={() => handleEdit(field)}
                                 className="text-gray-500 hover:text-indigo-600"
                             >
                                 {editField === field ? <FaSave /> : <FaEdit />}
-                            </button>
+                            </button> */}
                         </div>
                     ))}
                     <p className="text-gray-600">Role: {LocalUserInfo.role}</p>
