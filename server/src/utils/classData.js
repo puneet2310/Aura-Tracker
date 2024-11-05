@@ -37,6 +37,91 @@ const classData = [
             },
           ],
         },
+        {
+          day: 'Wednesday',
+          classes: [
+            {
+              subject: 'Chemistry',
+              instructor: 'Dr. Green',
+              startTime: '09:00',
+              endTime: '10:00',
+            },
+            {
+              subject: 'Biology',
+              instructor: 'Dr. White',
+              startTime: '10:15',
+              endTime: '11:15',
+            },
+          ],
+        },
+        {
+          day: 'Tuesday',
+          classes: [
+            {
+              subject: 'Chemistry',
+              instructor: 'Dr. Green',
+              startTime: '09:00',
+              endTime: '10:00',
+            },
+            {
+              subject: 'Biology',
+              instructor: 'Dr. White',
+              startTime: '10:15',
+              endTime: '11:15',
+            },
+          ],
+        },
+        {
+          day: 'Tuesday',
+          classes: [
+            {
+              subject: 'Chemistry',
+              instructor: 'Dr. Green',
+              startTime: '09:00',
+              endTime: '10:00',
+            },
+            {
+              subject: 'Biology',
+              instructor: 'Dr. White',
+              startTime: '10:15',
+              endTime: '11:15',
+            },
+          ],
+        },
+        {
+          day: 'Tuesday',
+          classes: [
+            {
+              subject: 'Chemistry',
+              instructor: 'Dr. Green',
+              startTime: '09:00',
+              endTime: '10:00',
+            },
+            {
+              subject: 'Biology',
+              instructor: 'Dr. White',
+              startTime: '10:15',
+              endTime: '11:15',
+            },
+          ],
+        },
+        {
+          day: 'Tuesday',
+          classes: [
+            {
+              subject: 'Chemistry',
+              instructor: 'Dr. Green',
+              startTime: '09:00',
+              endTime: '10:00',
+            },
+            {
+              subject: 'Biology',
+              instructor: 'Dr. White',
+              startTime: '10:15',
+              endTime: '11:15',
+            },
+          ],
+        },
       ],
     },
     {
@@ -57,6 +142,91 @@ const classData = [
               instructor: 'Dr. Brown',
               startTime: '10:00',
               endTime: '11:00',
+            },
+          ],
+        },
+        {
+          day: 'Tuesday',
+          classes: [
+            {
+              subject: 'Chemistry',
+              instructor: 'Dr. Green',
+              startTime: '09:00',
+              endTime: '10:00',
+            },
+            {
+              subject: 'Biology',
+              instructor: 'Dr. White',
+              startTime: '10:15',
+              endTime: '11:15',
+            },
+          ],
+        },
+        {
+          day: 'Wednesday',
+          classes: [
+            {
+              subject: 'Chemistry',
+              instructor: 'Dr. Green',
+              startTime: '09:00',
+              endTime: '10:00',
+            },
+            {
+              subject: 'Biology',
+              instructor: 'Dr. White',
+              startTime: '10:15',
+              endTime: '11:15',
+            },
+          ],
+        },
+        {
+          day: 'Tuesday',
+          classes: [
+            {
+              subject: 'Chemistry',
+              instructor: 'Dr. Green',
+              startTime: '09:00',
+              endTime: '10:00',
+            },
+            {
+              subject: 'Biology',
+              instructor: 'Dr. White',
+              startTime: '10:15',
+              endTime: '11:15',
+            },
+          ],
+        },
+        {
+          day: 'Tuesday',
+          classes: [
+            {
+              subject: 'Chemistry',
+              instructor: 'Dr. Green',
+              startTime: '09:00',
+              endTime: '10:00',
+            },
+            {
+              subject: 'Biology',
+              instructor: 'Dr. White',
+              startTime: '10:15',
+              endTime: '11:15',
+            },
+          ],
+        },
+        {
+          day: 'Tuesday',
+          classes: [
+            {
+              subject: 'Chemistry',
+              instructor: 'Dr. Green',
+              startTime: '09:00',
+              endTime: '10:00',
+            },
+            {
+              subject: 'Biology',
+              instructor: 'Dr. White',
+              startTime: '10:15',
+              endTime: '11:15',
             },
           ],
         },

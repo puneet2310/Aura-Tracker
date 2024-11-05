@@ -393,6 +393,37 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, user, "Account details updated successfully"));
 });
 
+const updateProfile = asyncHandler(async (req, res) => {
+  const {role, regNo, semester, stream} = req.body;
+  const currentUser = req.user;
+  
+  try {
+    const user = await User.findByIdAndUpdate(
+      currentUser?._id,
+      {
+        $set: {
+          role,
+          regNo,
+          semester,
+          stream,
+        },
+      },
+      { new: true }
+    ).select("-password -refreshToken");
+  
+    console.log("User details is: ", user)
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, user, "Account details updated successfully"));
+
+  } catch (error) {
+    console.log("Error while updating user details: ", error);
+    throw new ApiError(500, "Error while updating user details");
+  }
+
+  return 
+})
 const updateUserAvatar = asyncHandler(async (req, res) => {
   const avatarLocalPath = req.file?.path;
 
@@ -483,5 +514,6 @@ export {
   updateUserAvatar,
   googleLogin,
   calculateAcadAura,
-  leaderboard
+  leaderboard,
+  updateProfile
 };

@@ -22,7 +22,7 @@ app.use(
     })
 )
 
-seedDatabase()
+// seedDatabase()
 
 app.use(express.json({limit: "16kb"}))
 

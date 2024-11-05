@@ -17,7 +17,7 @@ import AllAcadGoals from './components/AcademicGoals/AllAcadGoals.jsx';
 import AboutUs from './pages/AboutUs'; // Import the AboutUs component
 import 'antd/dist/reset.css';
 import TimetablePage from './components/TimeTables/TimetablePage.jsx'
-
+import EditTimetableForm from './components/TimeTables/EditTimetableForm.jsx';
 
 const router = createBrowserRouter([
   {
@@ -55,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: '/timetable',
         element: <TimetablePage/>
+      },
+      {
+        path: '/timetable/edit',
+        element: <EditTimetableForm/>
       }
     ],
   },

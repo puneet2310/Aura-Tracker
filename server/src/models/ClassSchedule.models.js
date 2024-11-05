@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 
-const classScheduleSchema = new mongoose.Schema({
-  
+const classScheduleSchema = new mongoose.Schema({ 
   semester: {
     type: String,
     required: true,

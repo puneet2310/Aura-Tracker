@@ -4,7 +4,7 @@ import axiosInstance from '../../utils/axios.helper';
 import { useNavigate } from 'react-router-dom';
 import Profile from './Profile';
 import AcademicGoals from './AcademicGoals';
-
+import Button from '../Button';
 function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState({
@@ -93,7 +93,14 @@ function Dashboard() {
             <AcademicGoals 
             academicGoals={academicGoals}
             onUpdateUserInfo={handleUpdateUserInfo} 
-            />  
+            />
+
+            <Button
+                onClick={() => navigate('/timetable')}
+                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-300 block mx-auto"
+            >
+                See Your Timetable
+            </Button>  
         </>
       )}
     </div>

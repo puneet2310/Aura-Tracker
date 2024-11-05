@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import Button from '../Button';
 import axiosInstance from '../../utils/axios.helper';
+import { useSelector } from 'react-redux';
 
 const ClassSchedule = ({ stream, semester }) => {
     const [schedule, setSchedule] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const userData = useSelector((state) => state.auth.userData);
 
     const times = [
         '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', 
@@ -56,6 +59,7 @@ const ClassSchedule = ({ stream, semester }) => {
     };
 
     return (
+        <>
         <div className="max-w-fit mx-auto my-8 p-4 border border-gray-300 rounded shadow-lg">
             <h2 className="text-2xl font-bold text-center mb-4">Class Schedule for {stream} ( {semester} )</h2>
             {schedule ? (
@@ -97,6 +101,27 @@ const ClassSchedule = ({ stream, semester }) => {
                 <div className="text-center">No schedule available.</div>
             )}
         </div>
+
+        {
+            userData?.role === "CR" ? (
+                <Button
+                    type="submit"
+                    className="w-full bg-indigo-500 text-white rounded-md py-2 px-4 hover:bg-indigo-600"
+                    loading={loading}
+                    onClick={() => {
+                        navigate(`/timetable/edit/${stream}/${semester}`);
+                    }}
+                >
+                    Edit Schedule
+                </Button>
+            ) : (
+                <div className="text-indigo-600 mb-2 flex justify-center">
+                    Contact your CR to edit the schedule.
+                </div>
+            )
+        }
+
+        </>
     );
 };
 

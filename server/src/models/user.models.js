@@ -39,7 +39,20 @@ const userSchema = new Schema(
             trim: true, 
             index: true
         },
+        role: {
+            type: String,
+            enum: ["Student", "CR", "Faculty"],
+            default: "Student",
+        },
+        semester: {
+            type: String,
+            required: false
+        },
         stream: {
+            type: String,
+            required: false
+        },
+        regNo: {
             type: String,
             required: false
         },

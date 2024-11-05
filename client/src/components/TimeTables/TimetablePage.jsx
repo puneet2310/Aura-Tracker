@@ -2,7 +2,7 @@ import React from 'react';
 import ClassSchedule from './ClassSchedule';
 
 const TimetablePage = () => {
-    const stream = 'ECE'; 
+    const stream = 'CSE'; 
     const semester = 'Semester 1'; // this is the sample once the frontend is done we fetch the user stream and semester from the backend or store 
     console.log("here")
     return (
