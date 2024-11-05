@@ -1,22 +1,21 @@
-// DropdownMenu.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 const DropdownMenu = () => {
   const dropdownItems = [
-    { name: 'Profile', slug: '/profile' },
-    { name: 'Contact', slug: '/contact' },
-    { name: 'Setting', slug: '/settings' },
+    { name: 'Profile', slug: '/Profile' },
+    { name: 'Settings', slug: '/Setting' },
+    { name: 'Contact Us', slug: '/Contact' },
   ];
 
   return (
-    <div className="absloute bg-white shadow-lg rounded-md mt-2 w-48 border border-gray-200">
-      <ul>
+    <div className="bg-white shadow-lg mt-2 rounded-lg border border-gray-200 w-48">
+      <ul className="text-gray-700">
         {dropdownItems.map((item) => (
           <li key={item.name}>
             <Link
               to={item.slug}
-              className="block px-4 py-3 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition duration-150"
+              className="block px-4 py-2 hover:bg-blue-500 hover:text-white transition duration-200 rounded"
             >
               {item.name}
             </Link>

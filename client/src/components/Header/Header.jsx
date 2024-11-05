@@ -10,55 +10,35 @@ function Header() {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const avatar = userData?.avatar || '/path/to/default-avatar.png'; // Fallback for avatar
+  const avatar = userData?.avatar || '/path/to/default-avatar.png';
   const navItems = [
-    {
-      name: 'Home',
-      slug: '/',
-      active: true,
-    },
-    {
-      name: 'About Us',
-      slug: '/about',
-      active: true,
-    },
-    {
-      name: 'Login',
-      slug: '/login',
-      active: !authStatus,
-    },
-    {
-      name: 'Signup',
-      slug: '/signup',
-      active: !authStatus,
-    },
-    {
-      name: 'Dashboard',
-      slug: '/dashboard',
-      active: authStatus,
-    },
+    { name: 'Home', slug: '/', active: true },
+    { name: 'About Us', slug: '/about', active: true },
+    { name: 'Login', slug: '/login', active: !authStatus },
+    { name: 'Signup', slug: '/signup', active: !authStatus },
+    { name: 'Dashboard', slug: '/dashboard', active: authStatus },
   ];
 
-  const isActive = (slug) => window.location.pathname === slug; // Check if the route is active
+  const isActive = (slug) => window.location.pathname === slug;
 
   return (
-    <header className='py-3 shadow bg-gray-900'>
+    <header className='py-3 shadow bg-gray-900 relative z-50'>
       <nav className='flex items-center'>
         <div className='mr-4'>
           <Link to='/'>
             <Logo width='70px' />
           </Link>
         </div>
-        <ul className='flex ml-auto relative'>
+        <ul className='flex ml-auto'>
           {navItems.map((item) =>
             item.active ? (
-              <li key={item.name} className='relative'>
+              <li key={item.name}>
                 <button
                   onClick={() => navigate(item.slug)}
                   className={`inline-block px-6 py-2 transition duration-200 transform hover:scale-90 hover:bg-slate-600 rounded-full ${
                     isActive(item.slug) ? 'bg-slate-600 text-white' : 'text-gray-300'
                   }`}
-                  aria-label={`Navigate to ${item.name}`} // Accessibility improvement
+                  aria-label={`Navigate to ${item.name}`}
                 >
                   {item.name}
                 </button>
@@ -66,22 +46,23 @@ function Header() {
             ) : null
           )}
           {authStatus && (
-            <>
-              <li className='ml-4'>
-                <LogoutButton />
-              </li>
-              {/* Display Avatar on Right Side */}
-              <li className='ml-4 flex items-center'>
-                <button onClick={() => setShowDropdown(!showDropdown)} className='focus:outline-none'>
-                  <img
-                    src={avatar}
-                    alt='User avatar' // Improved alt text for accessibility
-                    className='mr-4 w-10 h-10 rounded-full object-cover border border-gray-400'
-                  />
-                </button>
-                {showDropdown && <DropdownMenu />} 
-              </li>
-            </>
+            <li className='ml-4 relative'>
+              <button
+                onClick={() => setShowDropdown(!showDropdown)}
+                className='focus:outline-none'
+              >
+                <img
+                  src={avatar}
+                  alt='User avatar'
+                  className='w-10 h-10 rounded-full object-cover border border-gray-400'
+                />
+              </button>
+              {showDropdown && (
+                <div className="absolute right-0 top-full mt-2">
+                  <DropdownMenu />
+                </div>
+              )}
+            </li>
           )}
         </ul>
       </nav>
