@@ -1,10 +1,17 @@
 import React from 'react';
 import ClassSchedule from './ClassSchedule';
+import { useSelector } from 'react-redux';
 
 const TimetablePage = () => {
-    const stream = 'CSE'; 
-    const semester = 'Semester 1'; // this is the sample once the frontend is done we fetch the user stream and semester from the backend or store 
-    console.log("here")
+    const userData = useSelector((state) => state.auth.userData);
+
+    if (!userData) {
+        return <p>Loading...</p>; // Add a loading indicator or fallback UI
+    }
+
+    const stream = userData.stream;
+    const semester = "Semester " + userData.semester;
+
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-3xl font-bold text-center mb-6">Timetable</h1>
@@ -12,5 +19,6 @@ const TimetablePage = () => {
         </div>
     );
 };
+
 
 export default TimetablePage;
