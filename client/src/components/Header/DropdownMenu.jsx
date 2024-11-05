@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const DropdownMenu = () => {
+
+  const [isOpen, setIsOpen] = useState(false);
   const dropdownItems = [
     { name: 'Profile', slug: '/Profile' },
     { name: 'Settings', slug: '/Setting' },
@@ -15,7 +17,7 @@ const DropdownMenu = () => {
           <li key={item.name}>
             <Link
               to={item.slug}
-              className="block px-4 py-2 hover:bg-blue-500 hover:text-white transition duration-200 rounded"
+              className="block px-4 py-2 hover:bg-indigo-600 hover:text-white transition duration-200 rounded"
             >
               {item.name}
             </Link>
