@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Button from '../Button';
 
 function Footer() {
@@ -29,14 +30,19 @@ function Footer() {
             <div>
               <p className="font-bold text-white">Quick Links</p>
               <div className="flex flex-col mt-4 space-y-2">
-                {['Home', 'Dashboard', 'Add Task'].map((link, index) => (
-                  <p
-                    key={index}
-                    className="text-gray-400 transition-colors duration-300 hover:text-blue-400 cursor-pointer"
-                  >
-                    {link}
-                  </p>
-                ))}
+                <Link
+                  to="/"
+                  className="text-gray-400 transition-colors duration-300 hover:text-blue-400"
+                >
+                  Home
+                </Link>
+                {/* Update the Link path for Dashboard to match your route structure */}
+                <Link to="/dashboard" className="text-gray-400 transition-colors duration-300 hover:text-blue-400">
+                  Dashboard
+                </Link>
+                <Link to="/set-acad-goals" className="text-gray-400 transition-colors duration-300 hover:text-blue-400">
+                  Set Academic Goals
+                </Link>
               </div>
             </div>
 

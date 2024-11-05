@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Logo, LogoutButton } from '../index';
+import { Container, Logo, LogoutButton } from '../index'; // Ensure LogoutButton is imported
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import DropdownMenu from './DropdownMenu';
@@ -29,7 +29,7 @@ function Header() {
             <Logo width='70px' />
           </Link>
         </div>
-        <ul className='flex ml-auto'>
+        <ul className='flex ml-auto items-center'> {/* Add items-center here for vertical alignment */}
           {navItems.map((item) =>
             item.active ? (
               <li key={item.name}>
@@ -46,7 +46,8 @@ function Header() {
             ) : null
           )}
           {authStatus && (
-            <li className='ml-4 relative'>
+            <div className='flex items-center ml-4'> {/* Flexbox for better alignment */}
+              <LogoutButton className="mr-4" /> {/* Add margin to separate the button from the avatar */}
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
                 className='focus:outline-none'
@@ -62,7 +63,7 @@ function Header() {
                   <DropdownMenu />
                 </div>
               )}
-            </li>
+            </div>
           )}
         </ul>
       </nav>
