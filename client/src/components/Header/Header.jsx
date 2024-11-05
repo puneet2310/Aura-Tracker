@@ -76,10 +76,10 @@ function Header() {
                   <img
                     src={avatar}
                     alt='User avatar' // Improved alt text for accessibility
-                    className='w-10 h-10 rounded-full object-cover border border-gray-400'
+                    className='mr-4 w-10 h-10 rounded-full object-cover border border-gray-400'
                   />
                 </button>
-                {/* {showDropdown && <DropdownMenu />} Optional dropdown on avatar click */}
+                {showDropdown && <DropdownMenu />} 
               </li>
             </>
           )}
