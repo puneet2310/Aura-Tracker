@@ -55,7 +55,7 @@ function Header() {
                 <img
                   src={avatar}
                   alt='User avatar'
-                  className='w-10 h-10 rounded-full object-cover border border-gray-400'
+                  className='w-10 h-10 rounded-full object-cover border border-gray-400 mr-4'
                 />
               </button>
               {showDropdown && (

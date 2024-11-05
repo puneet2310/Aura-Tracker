@@ -106,11 +106,34 @@ function SignUp() {
                         type="password"
                         placeholder="Create your password"
                         required
-                        {...register("password", { required: true })}
-                    />
-                    {errors.password?.type === "required" && (
-                        <p className="text-red-600">Password is required</p>
-                    )}
+                        {...register("password", {
+                            required: true,
+                            minLength: {
+                                value: 8, // Minimum length for the password
+                                message: "Password must be at least 8 characters long" // Error message for minimum length
+                            },
+                            maxLength: {
+                                value: 20, // Maximum length for the password
+                                message: "Password cannot exceed 20 characters" // Error message for maximum length
+                            },
+                            pattern: {
+                                value: /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{8,}$/, // Regex pattern: At least one uppercase letter, one lowercase letter, and one digit
+                                message: "Password must contain at least one uppercase letter, one lowercase letter, and one digit" // Error message for pattern mismatch
+                            }
+                        })}
+                        />
+                        {errors.password?.type === "required" && (
+                            <p className="text-red-600">Password is required</p>
+                        )}
+                        {errors.password?.type === "minLength" && (
+                            <p className="text-red-600">{errors.password.message}</p>
+                        )}
+                        {errors.password?.type === "maxLength" && (
+                            <p className="text-red-600">{errors.password.message}</p>
+                        )}
+                        {errors.password?.type === "pattern" && (
+                            <p className="text-red-600">{errors.password.message}</p>
+                        )}
                     <Input
                         label="Avatar"
                         type="file"

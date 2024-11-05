@@ -188,6 +188,7 @@ const googleLogin = async (req,res) => {
       console.log("googleRes: ",googleRes)
       oauth2Client.setCredentials(googleRes.tokens)
 
+      // Using the access token, the function makes a request to Google’s user info endpoint to retrieve user details
       const userRes = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo', {
           headers: {
               Authorization: `Bearer ${googleRes.tokens.access_token}`

@@ -19,6 +19,6 @@ const authSlice = createSlice({ // createSlice is a function that takes an objec
     }
 });
 
-export const {login, logout} = authSlice.actions; // export the actions to the store
+export const {login, logout} = authSlice.actions; // Export the actions to be used in components
 
-export default authSlice.reducer;
+export default authSlice.reducer; // Export the reducer function to be included in the store
