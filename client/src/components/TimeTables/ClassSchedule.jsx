@@ -2,12 +2,20 @@ import React, { useState, useEffect } from 'react';
 import Button from '../Button';
 import axiosInstance from '../../utils/axios.helper';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-const ClassSchedule = ({ stream, semester }) => {
+const ClassSchedule = () => {
     const [schedule, setSchedule] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const userData = useSelector((state) => state.auth.userData);
+    const navigate = useNavigate();
+
+    const stream = userData.stream;
+    const semester = "Semester " + userData.semester;
+
+    console.log("Stream: ", stream);
+    console.log("Semester: ", semester);
 
     const times = [
         '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', 
@@ -109,7 +117,7 @@ const ClassSchedule = ({ stream, semester }) => {
                     className="w-full bg-indigo-500 text-white rounded-md py-2 px-4 hover:bg-indigo-600"
                     loading={loading}
                     onClick={() => {
-                        navigate(`/timetable/edit/${stream}/${semester}`);
+                        navigate(`/timetable/edit`);
                     }}
                 >
                     Edit Schedule
