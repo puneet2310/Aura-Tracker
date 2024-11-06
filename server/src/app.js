@@ -5,6 +5,8 @@ import userRouter from "./routes/user.routes.js"
 import acadGoalsRoute from "./routes/acadGoals.routes.js"
 import timeTableRouter from "./routes/timetable.routes.js"
 import { errorHandler } from "./middlewares/error.middlewares.js"
+import studentRouter from "./routes/student.routes.js"
+import facultyRouter from "./routes/faculty.routes.js"
 import dotenv from "dotenv"
 
 dotenv.config({
@@ -33,6 +35,8 @@ app.use(cookieParser())
 //routes
 app.use("/api/v1/healthcheck", healthCheckRouter)
 app.use("/api/v1/users",userRouter)
+app.use("/api/v1/student", studentRouter)
+app.use("/api/v1/faculty", facultyRouter)
 app.use("/api/v1/acadGoals", acadGoalsRoute)
 app.use("/api/v1/timetable", timeTableRouter)
 

@@ -21,10 +21,14 @@ function Login() {
         setError('');
         setLoading(true);
         try {
-            const response = await axiosInstance.post('/users/login', data);
+            const response = await (await axiosInstance.post('/users/login', data));
+            console.log("response: ", response)
             const user = response?.data?.data?.user;
+            // const userData = response?.data?.data?.userData;
             const accessToken = `Bearer ${response.data.data.accessToken}`;
             
+            console.log("user: ", user)
+            // console.log("userData: ", userData)
             if (user) {
                 dispatch(authLogin(user));
                 localStorage.setItem('access_token', accessToken);

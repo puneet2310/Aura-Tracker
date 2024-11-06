@@ -21,7 +21,7 @@ const userSchema = new Schema(
         userName: {
             type: String,
             required: true,
-            unique: true,
+            // unique: true,
             lowercase: true,
             trim: true,
             index: true
@@ -29,7 +29,7 @@ const userSchema = new Schema(
         email: {
             type: String,
             required: true,
-            unique: true,
+            // unique: true,
             lowercase: true,
             trim: true, 
         },
@@ -41,20 +41,7 @@ const userSchema = new Schema(
         },
         role: {
             type: String,
-            enum: ["Student", "CR", "Faculty"],
-            default: "Student",
-        },
-        semester: {
-            type: String,
-            required: false
-        },
-        stream: {
-            type: String,
-            required: false
-        },
-        regNo: {
-            type: String,
-            required: false
+            enum: ["Student", "Faculty"],
         },
         avatar: {
             type: String, //cloudinary url
@@ -75,6 +62,16 @@ const userSchema = new Schema(
         },
         refreshToken:{
             type: String
+        },
+        student: { 
+            type: Schema.Types.ObjectId, 
+            ref: "Student",
+            // unique: true,
+        },
+        faculty: {
+            type: Schema.Types.ObjectId,
+            ref: "Faculty",
+            // unique: true,
         }
         
     }, {timestamps : true}

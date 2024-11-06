@@ -10,6 +10,7 @@ import jwt from "jsonwebtoken";
 import oauth2Client from '../utils/googleConfig.js'
 import axios from 'axios'
 import crypto from 'crypto'
+import { Student } from "../models/students.models.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -153,7 +154,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken"
-  );
+  ).populate('student');
 
   if (!loggedInUser) {
     throw new ApiError(500, "Something went wrong while login");
@@ -172,7 +173,7 @@ const loginUser = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        { user: loggedInUser, accessToken, refreshToken },
+        { user: loggedInUser, accessToken, refreshToken},
         "User logged in successfully"
       )
     );
@@ -370,13 +371,13 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 const updateAccountDetails = asyncHandler(async (req, res) => {
   const { userName, fullName, email, role, regNo, semester, stream } = req.body;
 
-  if (!fullName || !email) {
-    throw new ApiError(400, "Full name and email are required");
-  }
+  // if (!fullName || !email) {
+  //   throw new ApiError(400, "Full name and email are required");
+  // }
 
-  if(email !== email.toLowerCase()){
-    throw new ApiError(400, "Email must be in lowercase");
-  }
+  // if(email !== email.toLowerCase()){
+  //   throw new ApiError(400, "Email must be in lowercase");
+  // }
   const user = await User.findByIdAndUpdate(
     req.user?._id,
     {
@@ -429,6 +430,7 @@ const updateProfile = asyncHandler(async (req, res) => {
 
   return 
 })
+
 const updateUserAvatar = asyncHandler(async (req, res) => {
   const avatarLocalPath = req.file?.path;
 
@@ -456,6 +458,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, user, "Avatar updated successfully"));
 });
+
 const calculateAcadAura = asyncHandler(async (req, res) => {
   const userId = req.user._id; 
 
