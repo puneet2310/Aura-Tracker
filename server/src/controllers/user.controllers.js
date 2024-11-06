@@ -502,7 +502,9 @@ const calculateAcadAura = asyncHandler(async (req, res) => {
 });
 
 const leaderboard = asyncHandler(async (req, res) => {
-  const users = await User.find({}).sort({ acadAura: -1 });  
+  const users = await User.find({
+    role: "Student",                  // Filter for only students
+  }).sort({ acadAura: -1 });  
   console.log("LeaderBoard: ",users)
   
   return res

@@ -14,6 +14,8 @@ function Home() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // console.log('userData', userData);  
+
   const fullMessage =
     "Pro-Track helps you manage tasks efficiently, keep track of your goals, and stay organized. Start by exploring your dashboard and setting up your tasks for the day!";
 
@@ -72,28 +74,30 @@ function Home() {
             </div>
 
             {/* Academic Goals Card */}
-            <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-xl text-left">
-              <h2 className="text-center text-2xl font-bold text-gray-800 mb-2">Set Your Academic Goals</h2>
-              <p className="text-center text-gray-600 mb-4">
-                Achieve your potential by setting clear academic goals. Track your progress, stay focused, and reach new heights!
-              </p>
-              {authStatus ? (
-                <div className="flex justify-center">
-                  <Button
-                    label="Academic Goals"
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
-                    onClick={handleAcademicGoals}
-                  >
-                    Go to Academic Goals
-                    <ArrowRightIcon className="h-5 w-5 ml-2" />
-                  </Button>
-                </div>
-              ) : (
-                <p className="text-sm italic text-gray-500 text-center">
-                  Log in to start setting and tracking your academic goals.
+            { userData?.role === 'Student' && (
+                <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-xl text-left">
+                <h2 className="text-center text-2xl font-bold text-gray-800 mb-2">Set Your Academic Goals</h2>
+                <p className="text-center text-gray-600 mb-4">
+                  Achieve your potential by setting clear academic goals. Track your progress, stay focused, and reach new heights!
                 </p>
-              )}
-            </div>
+                {authStatus ? (
+                  <div className="flex justify-center">
+                    <Button
+                      label="Academic Goals"
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full flex items-center justify-center mt-4 transition-all duration-300"
+                      onClick={handleAcademicGoals}
+                    >
+                      Go to Academic Goals
+                      <ArrowRightIcon className="h-5 w-5 ml-2" />
+                    </Button>
+                  </div>
+                ) : (
+                  <p className="text-sm italic text-gray-500 text-center">
+                    Log in to start setting and tracking your academic goals.
+                  </p>
+                )}
+              </div>
+            )}
 
           </div>
 

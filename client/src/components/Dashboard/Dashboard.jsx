@@ -18,6 +18,7 @@ function Dashboard() {
   const [academicGoals, setAcademicGoals] = useState([]);
   const [academicAura, setAcademicAura] = useState(0);
   const authStatus = useSelector((state) => state.auth.status);
+  const userData = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -90,17 +91,23 @@ function Dashboard() {
             <Profile userInfo={userInfo} academicAura={academicAura} />
 
           {/* Academic Goals Section */}
-            <AcademicGoals 
-            academicGoals={academicGoals}
-            onUpdateUserInfo={handleUpdateUserInfo} 
-            />
+            { userData.role === 'Student' && (
+              <AcademicGoals
+                academicGoals={academicGoals}
+                onUpdateUserInfo={handleUpdateUserInfo}
+              />
+              
+            )}
 
-            <Button
+            { userData?.role === 'Student' && (
+              <Button
                 onClick={() => navigate('/timetable')}
                 className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-300 block mx-auto"
-            >
-                See Your Timetable
-            </Button>  
+              >
+                  See Your Timetable
+              </Button>  
+            )}
+            
         </>
       )}
     </div>

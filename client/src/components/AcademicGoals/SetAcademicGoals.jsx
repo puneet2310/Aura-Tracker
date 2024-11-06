@@ -7,7 +7,7 @@ import Button from "../Button";
 import { toast } from "react-toastify";
 import { icons } from "../../assets/Icons.jsx";
 import axiosInstance from "../../utils/axios.helper.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addUserAcadGoals } from "../../store/userSlice.js";
 
 function SetAcademicGoals() {
@@ -20,6 +20,8 @@ function SetAcademicGoals() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const userData = useSelector((state) => state.auth.userData);
+    console.log("userData", userData);
 
     const setAcadGoals = async (data) => {
         try {
