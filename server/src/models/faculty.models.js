@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { User } from "./user.models.js";
-
+import { AttendanceRecord } from "./attendanceRecord.models.js";
 const faculty = new Schema({
     facultyId: {
         type: Number,
@@ -15,6 +15,12 @@ const faculty = new Schema({
         type: Number,
         // required: true,
     },
+    attendanceRecords: [
+    {
+        type: Schema.Types.ObjectId,
+        ref: 'AttendanceRecord'
+    }
+    ],
     user:{
         type: Schema.Types.ObjectId,
         ref: "User",

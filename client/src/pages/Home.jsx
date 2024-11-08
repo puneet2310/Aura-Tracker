@@ -14,7 +14,7 @@ function Home() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // console.log('userData', userData);  
+  // console.log('userData on home page: ', userData);  
 
   const fullMessage =
     "Pro-Track helps you manage tasks efficiently, keep track of your goals, and stay organized. Start by exploring your dashboard and setting up your tasks for the day!";
@@ -23,6 +23,8 @@ function Home() {
     const fetchUserData = async () => {
       setLoading(true);
       try {
+        const response = await axiosInstance.get('/faculty/get-profile');
+        console.log("Response from ", response)
         setUser(userData.fullName);
 
         // Fetch all goals

@@ -21,7 +21,7 @@ function Login() {
         setError('');
         setLoading(true);
         try {
-            const response = await (await axiosInstance.post('/users/login', data));
+            const response = await axiosInstance.post('/users/login', data);
             console.log("response: ", response)
             const user = response?.data?.data?.user;
             // const userData = response?.data?.data?.userData;

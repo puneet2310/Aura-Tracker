@@ -20,6 +20,12 @@ const student = new Schema({
         unique: true,
         // required: true,
     },
+    attendanceRecords: [
+    {
+        type: Schema.Types.ObjectId,
+        ref: 'AttendanceRecord'
+    }
+    ],
     user:{
         type: Schema.Types.ObjectId,
         ref: "User",

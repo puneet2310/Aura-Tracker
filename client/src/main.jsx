@@ -20,6 +20,8 @@ import TimetablePage from './components/TimeTables/TimetablePage.jsx'
 import EditTimetableForm from './components/TimeTables/EditTimetableForm.jsx';
 import Profile from './components/Profile/Profile.jsx';
 import Contact from './components/Contact/Contact.jsx';
+import DisplayStudent from './components/Dashboard/DisplayStudent.jsx';
+import AttendancePage from './components/Attendance/AttendancePage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -69,6 +71,14 @@ const router = createBrowserRouter([
       {
         path: '/contact',
         element: <Contact />
+      },
+      {
+        path: '/students',
+        element: <DisplayStudent />
+      },
+      {
+        path: '/faculty/take-attendance',
+        element: <AttendancePage />
       }
     ],
   },

@@ -1,5 +1,5 @@
-import { Router } from "express";
 import { Faculty } from "../models/faculty.models.js";
+import { Student } from "../models/students.models.js"
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.models.js";
@@ -61,7 +61,6 @@ const updateProfile = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, { user, updatedFaculty }, "Profile updated successfully"));
 
 })
-
 const getProfile = asyncHandler(async (req, res) => {
     const currentUser = req.user;
     const user = await User.findById(currentUser._id)
@@ -81,8 +80,34 @@ const getProfile = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(200, responseData, "Profile fetched successfully"));
 })
+const getStudentsList = asyncHandler(async (req, res) => {
+    const dept = req.params.department
+    console.log("dept: ", dept)
+    const students = await Student.find({ stream: dept }).select('user');
+    console.log("students: ", students)
+
+    if (!students) {
+        return res
+            .status(400)
+            .json(new ApiResponse(400, null, "Students not found"));
+    }
+    
+    const studentsWithUser = await Promise.all(students.map(async (student) => {
+        const user = await User.findById(student.user).populate('student').select('-password -refreshToken');
+        return {
+            user,
+        };
+    }));
+
+    console.log("studentsWithUser: ", studentsWithUser)
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, studentsWithUser, "Students fetched successfully"));
+})
     
 export {
     updateProfile,
-    getProfile
+    getProfile,
+    getStudentsList
 }

@@ -7,6 +7,7 @@ import timeTableRouter from "./routes/timetable.routes.js"
 import { errorHandler } from "./middlewares/error.middlewares.js"
 import studentRouter from "./routes/student.routes.js"
 import facultyRouter from "./routes/faculty.routes.js"
+import attendanceRouter from "./routes/attendance.routes.js"
 import dotenv from "dotenv"
 
 dotenv.config({
@@ -39,6 +40,7 @@ app.use("/api/v1/student", studentRouter)
 app.use("/api/v1/faculty", facultyRouter)
 app.use("/api/v1/acadGoals", acadGoalsRoute)
 app.use("/api/v1/timetable", timeTableRouter)
+app.use("/api/v1/attendance", attendanceRouter)
 
 // app.use(errorHandler)
 
