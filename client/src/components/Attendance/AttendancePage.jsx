@@ -77,7 +77,7 @@ function AttendancePage() {
     console.log(students)
     const attendanceData = students.map((student) => ({
       
-      studentId: student.user._id,
+      studentId: student.student._id,
       facultyId: userData._id, // Replace with the actual faculty ID
       subject: selectedSubject,
       department: "CSE", // Replace with dynamic data if needed
@@ -145,7 +145,6 @@ function AttendancePage() {
           </thead>
           <tbody>
             {students.map((student, index) => (
-              console.log(student.user._id),
               <tr key={student.user._id} className="border-b hover:bg-indigo-50">
                 <td className="py-2 px-4 text-sm text-gray-700">{index + 1}</td>
                 <td className="py-2 px-4 text-sm text-gray-700">{student.user.fullName}</td>

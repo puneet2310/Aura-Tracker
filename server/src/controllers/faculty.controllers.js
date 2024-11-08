@@ -96,6 +96,7 @@ const getStudentsList = asyncHandler(async (req, res) => {
         const user = await User.findById(student.user).populate('student').select('-password -refreshToken');
         return {
             user,
+            student: student
         };
     }));
 
