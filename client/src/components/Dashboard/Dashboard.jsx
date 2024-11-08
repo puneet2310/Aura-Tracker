@@ -18,6 +18,9 @@ function Dashboard() {
       try {
         const response = await axiosInstance.get('/acadGoals/get-acad-goals');
         setAcademicGoals(response.data.data);
+
+        const res1 = await axiosInstance.get('/student/get-attendance');
+        console.log('Attendance response:', res1.data);
       } catch (error) {
         console.log('Error fetching academic goals:', error);
       }

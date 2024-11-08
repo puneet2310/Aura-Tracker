@@ -3,7 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.models.js";
 import { Student } from "../models/students.models.js";
 import { ApiError } from "../utils/Apierror.js";
-
+import { AttendanceRecord } from "../models/attendanceRecord.models.js";
 const updateProfile = asyncHandler(async (req, res) => {
     console.log("in the student chamber")
     console.log(req.body)
@@ -71,7 +71,6 @@ const updateProfile = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(200, { user, updatedStudent }, "Profile updated successfully"));
 });
-
 const getProfile = asyncHandler(async (req, res) => {
     const currentUser = req.user;
     const user = await User.findById(currentUser._id);
@@ -96,4 +95,35 @@ const getProfile = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, responseData, "Profile fetched successfully"));
 });
 
-export { updateProfile, getProfile };
+const getAttendance = asyncHandler(async (req, res) => {
+    const currentUser = req.user;
+
+    // Find the student profile based on the authenticated user
+    const student = await Student.findOne({ user: currentUser._id }).populate("user");
+    console.log("student: ", student);
+
+    if (!student) {
+        return res
+            .status(400)
+            .json(new ApiResponse(400, null, "Student not found"));
+    }
+
+    // Fetch attendance records associated with the student
+    const attendance = await AttendanceRecord.find({ studentId: student._id })
+        .select("date status subject") // Select the relevant fields to return
+
+        console.log("attendance: ", attendance);
+    if (!attendance || attendance.length === 0) {
+        return res
+            .status(404)
+            .json(new ApiResponse(404, null, "No attendance records found"));
+    }
+
+    console.log("attendance: ", attendance);
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, attendance, "Attendance records fetched successfully"));
+});
+
+export { updateProfile, getProfile, getAttendance };
