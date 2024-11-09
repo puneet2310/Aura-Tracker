@@ -1,4 +1,3 @@
-// pages/AttendancePage.js
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../utils/axios.helper';
 import { useSelector } from 'react-redux';

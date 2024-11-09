@@ -4,8 +4,7 @@ import axiosInstance from '../../utils/axios.helper';
 import { useDispatch, useSelector } from 'react-redux';
 import { login as authLogin } from '../../store/authSlice';
 
-function Profile() {
-    
+function Profile({presentDays}) {
     const userData = useSelector((state) => state.auth.userData);
 
     return (
@@ -37,6 +36,7 @@ function Profile() {
                 </div>
             </div>
             { userData.role === 'Student' && (
+                <div className='flex justify-center items-center gap-3'>  
                 <div className="mt-4 p-4 bg-gray-200 rounded-lg text-center w-full max-w-60">
                     <h4 className="text-lg font-semibold mb-2 text-gray-800">Academic Aura</h4>
                     <div className="flex justify-center items-center">     
@@ -50,7 +50,22 @@ function Profile() {
                         </div>
                     </div>
                 </div>
+                <div className="mt-4 p-4 bg-gray-200 rounded-lg text-center w-full max-w-60">
+                    <h4 className="text-lg font-semibold mb-2 text-gray-800">Attendance Aura</h4>
+                    <div className="flex justify-center items-center">     
+                        <div className="relative">
+                            <div
+                                className="w-20 h-20 flex items-center justify-center text-2xl font-bold bg-gradient-to-r from-indigo-500 to-indigo-700 text-white rounded-full shadow-md"
+                                title="Your academic aura reflects your learning progress and accomplishments"
+                            >
+                                {presentDays}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
             )}
+            
         </div>
     );
 }

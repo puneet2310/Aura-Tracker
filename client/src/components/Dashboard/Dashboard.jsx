@@ -1,3 +1,4 @@
+// Dashboard.js
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axiosInstance from '../../utils/axios.helper';
@@ -5,34 +6,51 @@ import { useNavigate } from 'react-router-dom';
 import Profile from './Profile';
 import AcademicGoals from './AcademicGoals';
 import Button from '../Button';
+import AttendanceTable from '../Attendance/AttendanceTable';
 
 function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [academicGoals, setAcademicGoals] = useState([]);
+  const [attendanceData, setAttendanceData] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState(null);
+  const [totalPresent, setTotalPresent] = useState(0);
   const authStatus = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchGoals = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       try {
-        const response = await axiosInstance.get('/acadGoals/get-acad-goals');
-        setAcademicGoals(response.data.data);
+        // Fetch academic goals
+        const goalsResponse = await axiosInstance.get('/acadGoals/get-acad-goals');
+        setAcademicGoals(goalsResponse.data.data);
 
-        const res1 = await axiosInstance.get('/student/get-attendance');
-        console.log('Attendance response:', res1.data);
+        // Fetch attendance data
+        const attendanceResponse = await axiosInstance.get('/student/get-attendance');
+        console.log("Attendance Response:", attendanceResponse.data.data);
+        setAttendanceData(attendanceResponse.data.data);
       } catch (error) {
-        console.log('Error fetching academic goals:', error);
+        console.log('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     if (authStatus) {
-      fetchGoals();
+      fetchData();
     }
   }, [authStatus]);
 
-  const handleUpdateUserInfo = (updatedUserInfo) => {
-    setUserInfo(updatedUserInfo);
+  useEffect(() => {
+    // Calculate total present whenever attendanceData changes
+    const presentDays = attendanceData.filter(record => record.status === 'Present').length;
+    console.log("Total Present:", presentDays);
+    setTotalPresent(presentDays);
+  }, [attendanceData]);
+
+  const handleSubjectSelection = (subject) => {
+    setSelectedSubject(subject);
   };
 
   if (!authStatus) {
@@ -48,14 +66,14 @@ function Dashboard() {
       ) : (
         <>
           {/* User Profile Section */}
-          <Profile />
+          <Profile presentDays={totalPresent} />
 
           {/* Conditional Rendering for Student Role */}
           {userData.role === 'Student' && (
-            <AcademicGoals
-              academicGoals={academicGoals}
-              onUpdateUserInfo={handleUpdateUserInfo}
-            />
+            <>
+              <AcademicGoals academicGoals={academicGoals} />
+              
+            </>
           )}
 
           {/* Conditional Rendering for Faculty Role with Button to View Students */}
@@ -78,12 +96,20 @@ function Dashboard() {
 
           {/* Timetable Button for Students */}
           {userData.role === 'Student' && (
-            <Button
-              onClick={() => navigate('/timetable')}
-              className="mt-4 bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-300 block mx-auto"
-            >
-              See Your Timetable
-            </Button>
+            <div className='flex flex-col items-center'>
+              <Button
+                onClick={() => navigate('/attendance')}
+                className="mt-4 bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-300"
+              >
+                View Attendance
+              </Button>
+              <Button
+                onClick={() => navigate('/timetable')}
+                className="mt-4 bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition duration-300 block mx-auto"
+              >
+                See Your Timetable
+              </Button>
+            </div>
           )}
         </>
       )}
