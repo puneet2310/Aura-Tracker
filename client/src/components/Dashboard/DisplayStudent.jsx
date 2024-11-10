@@ -9,8 +9,9 @@ function DisplayStudent() {
   const [loading, setLoading] = useState(false);
   const [department, setDepartment] = useState('');
   const [semester, setSemester] = useState('');
-  const [selectedCR, setSelectedCR] = useState(null); // Store selected CR
-  const [currentCR, setCurrentCR] = useState(null); // Store the current CR
+  const [selectedCR, setSelectedCR] = useState(null);
+  const [currentCR, setCurrentCR] = useState(null);
+  const [isSemesterSelected, setIsSemesterSelected] = useState(false); // New state to track semester selection
   const userData = useSelector((state) => state.auth.userData);
 
   // Fetch department info on component load
@@ -37,14 +38,13 @@ function DisplayStudent() {
     try {
       const response = await axiosInstance.get(`/faculty/get-students-list/${department}/${semester}`);
       setStudents(response.data.data);
-
       const response2 = await axiosInstance.get(`/classRepresentative/get-class-representive/${department}/${semester}`);
-      setCurrentCR(response2.data.data); // Set the current CR for display
-      console.log(response2.data.data);
+      setCurrentCR(response2.data.data);
     } catch (error) {
       console.log('Error fetching students or CR:', error);
     }
     setLoading(false);
+    setIsSemesterSelected(true); // Update to reflect the semester is loaded
   };
 
   const handleSetCR = async () => {
@@ -76,7 +76,6 @@ function DisplayStudent() {
             department,
             semester,
           });
-          console.log('Class Representative set successfully:', response.data);
           toast.success('Class Representative updated successfully!');
           loadStudents(); // Reload students to update the displayed CR
         } catch (error) {
@@ -103,7 +102,11 @@ function DisplayStudent() {
       <div className="flex items-center justify-between mb-6">
         <select
           value={semester}
-          onChange={(e) => setSemester(e.target.value)}
+          onChange={(e) => {
+            setSemester(e.target.value);
+            setIsSemesterSelected(false); // Reset the flag when semester changes
+            setStudents([]); // Clear the students list when semester changes
+          }}
           className="px-3 py-2 border border-gray-300 rounded-lg"
         >
           <option value="">Select Semester</option>
@@ -126,7 +129,11 @@ function DisplayStudent() {
         <p className="min-h-screen flex items-center justify-center text-lg text-center text-indigo-500 animate-pulse">
           Loading students...
         </p>
-      ) : !loading && students.length === 0 && semester ? (
+      ) : !isSemesterSelected && semester ? (
+        <p className="text-center text-gray-500 text-lg">
+          Please load the students for Semester {semester}.
+        </p>
+      ) : isSemesterSelected && students.length === 0 ? (
         <p className="text-center text-gray-500 text-lg">
           No students found for Semester {semester}.
         </p>
