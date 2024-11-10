@@ -31,7 +31,6 @@ const EditTimetableForm = () => {
             console.log("Response:", response.data);
 
             if (response.status === 200) {
-
                 toast.success("Timetable updated successfully!");
             } else {
                 setError("Failed to update the timetable.");
