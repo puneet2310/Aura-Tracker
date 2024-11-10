@@ -5,6 +5,6 @@ const router = Router()
 
 router.route('/update-profile').patch(verifyJWT, updateProfile)
 router.route('/get-profile').get(verifyJWT, getProfile)
-router.route('/get-students-list/:department').get(verifyJWT, getStudentsList)
+router.route('/get-students-list/:department/:semester').get(verifyJWT, getStudentsList)
 
 export default router

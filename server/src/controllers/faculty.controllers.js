@@ -82,8 +82,10 @@ const getProfile = asyncHandler(async (req, res) => {
 })
 const getStudentsList = asyncHandler(async (req, res) => {
     const dept = req.params.department
+    const semester = req.params.semester
+
     console.log("dept: ", dept)
-    const students = await Student.find({ stream: dept }).select('user');
+    const students = await Student.find({ stream: dept, semester: semester }).select('user');
     console.log("students: ", students)
 
     if (!students) {
