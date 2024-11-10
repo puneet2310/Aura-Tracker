@@ -1,8 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../Button';
-
+import { useDispatch, useSelector } from 'react-redux';
 function Footer() {
+  //use it when the user data is not null
+  const userData = useSelector((state) => state.auth.userData);
+
+  if (!userData) {
+    // Return null or an alternative component if userData is null
+    return null;
+  }
   return (
     <footer className="bg-gray-900 text-gray-300 font-sans">
       <div className="container px-4 py-8 mx-auto">
@@ -40,25 +47,24 @@ function Footer() {
                 <Link to="/dashboard" className="text-gray-400 transition-colors duration-300 hover:text-blue-400">
                   Dashboard
                 </Link>
-                <Link to="/set-acad-goals" className="text-gray-400 transition-colors duration-300 hover:text-blue-400">
-                  Set Academic Goals
-                </Link>
+                {userData.role !== 'Faculty' ? (
+                  <Link
+                    to="/set-acad-goals"
+                    className="text-gray-400 transition-colors duration-300 hover:text-blue-400"
+                  >
+                    Set Academic Goals
+                  </Link>
+                ) : (
+                  <Link
+                    to="faculty/take-attendance"
+                    className="text-gray-400 transition-colors duration-300 hover:text-blue-400"
+                  >
+                    Take Attendance
+                  </Link>
+                )}
               </div>
             </div>
 
-            <div>
-              <p className="font-bold text-white">Favourites</p>
-              <div className="flex flex-col mt-4 space-y-2">
-                {['Gallery', 'Leaderboard', 'Your Achievements'].map((link, index) => (
-                  <p
-                    key={index}
-                    className="text-gray-400 transition-colors duration-300 hover:text-blue-400 cursor-pointer"
-                  >
-                    {link}
-                  </p>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
 
