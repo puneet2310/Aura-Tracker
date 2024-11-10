@@ -1,27 +1,34 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
+import emailjs from '@emailjs/browser';
 // import { Link } from 'react-router-dom';
 // import Button from '../Button';
 
 function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  });
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  
+  const form = useRef();
 
-  const handleSubmit = (e) => {
+  const sendEmail = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
 
-    // Here you can add logic to send form data to an API endpoint
+    emailjs
+      .sendForm(import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        form.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      )
+      .then(
+        () => {
+          console.log('SUCCESS!');
+          console.log('Message Sent');
+          e.target.reset();
+        },
+        (error) => {
+          console.log('FAILED...', error.text);
+          console.log(error);
+          e.target.reset();
+        },
+      );
   };
 
   return (
@@ -31,14 +38,13 @@ function Contact() {
         <p className="text-gray-600 mb-6">
           Have questions or feedback? Send us a message below.
         </p>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form ref={form} onSubmit={sendEmail} className="space-y-4">
           <div>
             <label className="block text-gray-700">Name</label>
             <input
               type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
+              name="user_name"
+      
               className="w-full px-4 py-2 mt-1 text-gray-800 border rounded-lg focus:border-blue-500 focus:outline-none"
               required
             />
@@ -47,9 +53,7 @@ function Contact() {
             <label className="block text-gray-700">Email</label>
             <input
               type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
+              name="user_email"
               className="w-full px-4 py-2 mt-1 text-gray-800 border rounded-lg focus:border-blue-500 focus:outline-none"
               required
             />
@@ -59,8 +63,6 @@ function Contact() {
             <input
               type="text"
               name="subject"
-              value={formData.subject}
-              onChange={handleChange}
               className="w-full px-4 py-2 mt-1 text-gray-800 border rounded-lg focus:border-blue-500 focus:outline-none"
             />
           </div>
@@ -68,8 +70,6 @@ function Contact() {
             <label className="block text-gray-700">Message</label>
             <textarea
               name="message"
-              value={formData.message}
-              onChange={handleChange}
               rows="4"
               className="w-full px-4 py-2 mt-1 text-gray-800 border rounded-lg focus:border-blue-500 focus:outline-none"
               required

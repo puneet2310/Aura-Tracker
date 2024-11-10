@@ -6,7 +6,7 @@ import { login as authLogin } from '../../store/authSlice';
 
 function Profile({presentDays}) {
     const userData = useSelector((state) => state.auth.userData);
-
+    // const userRole = userData.role;
     return (
         <div className="bg-indigo-200 p-6 rounded-lg shadow-md mb-6">
             <div className="flex justify-center items-center p-6 rounded-lg shadow-md mb-6">
@@ -71,3 +71,4 @@ function Profile({presentDays}) {
 }
 
 export default Profile;
+// export  {userRole};
