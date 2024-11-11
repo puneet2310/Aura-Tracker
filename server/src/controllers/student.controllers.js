@@ -32,11 +32,16 @@ const updateProfile = asyncHandler(async (req, res) => {
 
     const existedStudent = await Student.findOne({
         $or: [{ mobNo}, { regNo }],
-      });
-    
+      }).populate("user");
+    console.log("existedStudent: ", existedStudent)
     if (existedStudent) {
-        console.log("See here : ", existedStudent)
-        throw new ApiError(403, "Registration number or MobNo already exists");
+
+        if(existedStudent.user._id === req.user._id ){
+            console.log("See here : ", existedStudent)
+            throw new ApiError(403, "Registration number or MobNo already exists");
+        }
+
+
     }
 
     // Now handle student-specific fields

@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import emailjs from '@emailjs/browser';
+import { openNotification } from '../Notification/antd';
 // import { Link } from 'react-router-dom';
 // import Button from '../Button';
 
@@ -19,13 +20,11 @@ function Contact() {
       )
       .then(
         () => {
-          console.log('SUCCESS!');
-          console.log('Message Sent');
+          openNotification('success', 'Email sent successfully!');
           e.target.reset();
         },
         (error) => {
-          console.log('FAILED...', error.text);
-          console.log(error);
+          openNotification('error', 'Email sending failed!');
           e.target.reset();
         },
       );
