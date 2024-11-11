@@ -10,22 +10,28 @@ function AttendancePage() {
   const [attendance, setAttendance] = useState({});
   const [loading, setLoading] = useState(true);
   const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedSemester, setSelectedSemester] = useState('');
   const userData = useSelector((state) => state.auth.userData);
   console.log(userData)
 
   const subjects = ['Analysis of Algorithms', 'Automata', 'OOPs']
+  const semesters = [1, 2, 3, 4, 5, 6, 7, 8]; // Add any semesters you want here
 
   useEffect(() => {
     console.log("Attendance state has changed:", attendance);
   }, [attendance]);
 
   const fetchStudents = async () => {
-    if (!selectedSubject) return;
+    if (!selectedSubject || !selectedSemester) return;
 
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`/faculty/get-students-list/${'CSE'}`);
-      console.log(response)
+      const response1 = await axiosInstance.get('/faculty/get-profile');
+      console.log(response1);
+
+      const department = response1.data.data.faculty.department;
+      const response = await axiosInstance.get(`/faculty/get-students-list/${department}/${selectedSemester}`);
+      console.log(response);
       setStudents(response.data.data);
     } catch (error) {
       console.error('Error fetching students:', error);
@@ -35,9 +41,9 @@ function AttendancePage() {
   };
 
   const handleAttendanceChange = (studentId, status) => {
-    console.log(studentId, status)
+    console.log(studentId, status);
     setAttendance((prev) => ({ ...prev, [studentId]: status }));
-    console.log(attendance)
+    console.log(attendance);
   };
 
   const getWeekNumber = (date) => {
@@ -45,7 +51,7 @@ function AttendancePage() {
     const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
     return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
   };
-  
+
   const submitAttendance = async () => {
     if (!selectedSubject) {
       Swal.fire({
@@ -60,10 +66,10 @@ function AttendancePage() {
       subject: selectedSubject,
       department: "CSE",
       facultyId: userData._id,
-    }
-    const response = await axiosInstance.post("/attendance/check-attendance-exists", data)
-    console.log("Response isL  : ",response)
-    if(response.data.exists){
+    };
+    const response = await axiosInstance.post("/attendance/check-attendance-exists", data);
+    console.log("Response is: ", response);
+    if (response.data.exists) {
       Swal.fire({
         title: "Attendance already recorded for today.",
         icon: "info",
@@ -72,24 +78,21 @@ function AttendancePage() {
       });
       return;
     }
-    
-    console.log(students)
-    const attendanceData = students.map((student) => ({
-      
-      studentId: student.student._id,
-      facultyId: userData._id, // Replace with the actual faculty ID
-      subject: selectedSubject,
-      department: "CSE", // Replace with dynamic data if needed
-      date: new Date(),
-      status: attendance[student.user._id] || "Absent", // Default to 'Absent' if no selection
-      weekNumber: getWeekNumber(new Date()), // Helper function to get week number
-      month: new Date().getMonth() + 1, // JavaScript months are 0-based
-      year: new Date().getFullYear(),
 
+    const attendanceData = students.map((student) => ({
+      studentId: student.student._id,
+      facultyId: userData._id,
+      subject: selectedSubject,
+      department: "CSE",
+      date: new Date(),
+      status: attendance[student.user._id] || "Present",
+      weekNumber: getWeekNumber(new Date()),
+      month: new Date().getMonth() + 1,
+      year: new Date().getFullYear(),
     }));
 
     console.log("Attendance Data:", attendanceData);
-  
+
     try {
       const response = await axiosInstance.post('/attendance/mark-attendance', { records: attendanceData });
       if (response.status === 201) {
@@ -101,19 +104,16 @@ function AttendancePage() {
     }
   };
 
-
-  
-
   return (
     <div className="max-w-4xl mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-3xl font-semibold text-center mb-6 text-gray-700">Attendance</h2>
-      
-      {/* Subject Selection Dropdown */}
-      <div className="flex justify-center mb-6">
+
+      {/* Subject and Semester Selection */}
+      <div className="flex justify-between mb-6">
         <select
           value={selectedSubject}
           onChange={(e) => setSelectedSubject(e.target.value)}
-          className="block w-full p-2 border rounded-md text-gray-700"
+          className="block w-full p-2 border rounded-md text-gray-700 mr-4"
         >
           <option value="">Select a Subject</option>
           {subjects.map((subject) => (
@@ -122,6 +122,20 @@ function AttendancePage() {
             </option>
           ))}
         </select>
+
+        <select
+          value={selectedSemester}
+          onChange={(e) => setSelectedSemester(e.target.value)}
+          className="block w-full p-2 border rounded-md text-gray-700 ml-4"
+        >
+          <option value="">Select a Semester</option>
+          {semesters.map((semester) => (
+            <option key={semester} value={semester}>
+              Semester {semester}
+            </option>
+          ))}
+        </select>
+
         <button
           onClick={fetchStudents}
           className="ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
@@ -160,12 +174,12 @@ function AttendancePage() {
                     <option value="Excused">Excused</option>
                   </select>
                 </td>
-
               </tr>
             ))}
           </tbody>
         </table>
       )}
+
       <div className="flex justify-center mt-6">
         <button
           onClick={submitAttendance}

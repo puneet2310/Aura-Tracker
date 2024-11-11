@@ -68,7 +68,21 @@ const getClassRepresentive = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, classRepresentive, "Class Representive fetched successfully"))
 })
 
+const checkCRStatus = asyncHandler(async (req, res) => {
+    const studentId = req.params.studentId
+    const user = await User.findById(studentId)
+    if(!user){
+        throw new ApiError(400, "User not found")
+    }
+    console.log(user)
+    const isCR = await ClassRepresentive.findOne({student: user.student})
+    if(isCR){
+        return res.status(200).json(new ApiResponse(200, {isCR: true}, "User is Class Representive"))
+    }
+    return res.status(200).json(new ApiResponse(200, {isCR: false}, "User is not Class Representive"))
+})
 export {
     createClassRepresentive,
-    getClassRepresentive
+    getClassRepresentive,
+    checkCRStatus
 }

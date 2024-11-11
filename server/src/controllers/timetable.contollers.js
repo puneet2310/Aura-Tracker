@@ -31,8 +31,8 @@ const getTimetable = asyncHandler(async (req, res) => {
 })
 
 const editTimeTable = asyncHandler(async (req, res) => {
-    const semester = req.params.semester
-    const stream = req.params.stream
+    const semester = "Semester " + req.params.semester
+    const stream =  req.params.stream
 
     const {day, subject, instructor, startTime, endTime} = req.body
     

@@ -10,6 +10,7 @@ const ClassSchedule = ({ stream, semester }) => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const userData = useSelector((state) => state.auth.userData);
+    const [isCR, setIsCR] = useState(false);
 
     const times = [
         '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', 
@@ -23,7 +24,13 @@ const ClassSchedule = ({ stream, semester }) => {
             try {
                 const response = await axiosInstance.get(`/timetable/${stream}/${semester}`);
                 setSchedule(response.data.data);
+
+                const response2 = await axiosInstance.get(`/classRepresentative/check-cr-status/${userData._id}`);
+                    console.log(response2);
+                    setIsCR(response2.data.data.isCR);
                 setError(''); // Clear any previous errors
+
+
             } catch (err) {
                 console.error('Error fetching the schedule:', err);
                 setError('Error fetching the schedule.');
@@ -106,7 +113,7 @@ const ClassSchedule = ({ stream, semester }) => {
             </div>
 
             {/* Conditional rendering for "Edit Schedule" button */}
-            {userData?.role === "Faculty" ? (
+            {isCR ? (
                 <Button
                     type="button"
                     className="w-full bg-indigo-500 text-white rounded-md py-2 px-4 hover:bg-indigo-600"
