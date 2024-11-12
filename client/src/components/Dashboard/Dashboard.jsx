@@ -91,6 +91,12 @@ function Dashboard() {
               >
                 Take Today's Attendance
               </Button>
+              <Button
+                onClick={() => navigate('/faculty/upload-assignment')}
+                className="mt-4 bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-800 transition duration-300 block mx-auto"
+              >
+                Upload Assignment
+              </Button>
             </div>
           )}
 

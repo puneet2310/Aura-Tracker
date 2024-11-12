@@ -61,6 +61,7 @@ const registerUser = asyncHandler(async (req, res) => {
     console.log("See here : ", existedUser)
     throw new ApiError(403, "User already exists");
   }
+  
 
   //handle the images (images comes in file gives by the multer)
   console.warn(req.files);

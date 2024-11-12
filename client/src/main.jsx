@@ -23,6 +23,7 @@ import Contact from './components/Contact/Contact.jsx';
 import DisplayStudent from './components/Dashboard/DisplayStudent.jsx';
 import AttendancePage from './components/Attendance/AttendancePage.jsx';
 import ViewAttendance from './components/Attendance/ViewAttendance.jsx';
+import SetAssignment from './components/Assignment/SetAssignment.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -79,6 +80,10 @@ const router = createBrowserRouter([
       {
         path: '/faculty/take-attendance',
         element: <AttendancePage />
+      },
+      {
+        path: '/faculty/upload-assignment',
+        element: <SetAssignment />
       },
       {
         path: '/attendance',
