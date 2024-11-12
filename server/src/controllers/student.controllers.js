@@ -4,6 +4,7 @@ import { User } from "../models/user.models.js";
 import { Student } from "../models/students.models.js";
 import { ApiError } from "../utils/Apierror.js";
 import { AttendanceRecord } from "../models/attendanceRecord.models.js";
+import { Assignment } from "../models/assignments.models.js"
 const updateProfile = asyncHandler(async (req, res) => {
     console.log("in the student chamber")
     console.log(req.body)
@@ -131,4 +132,32 @@ const getAttendance = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, attendance, "Attendance records fetched successfully"));
 });
 
-export { updateProfile, getProfile, getAttendance };
+const getAssignments = asyncHandler(async (req, res) => {
+
+    console.log("req.body: ", req.body)
+    const department = req.params.stream
+    const semester = req.params.semester
+    const subject = req.params.subject
+
+    console.log("Department: ", department , semester, subject)
+
+    const assignments = await Assignment.find({
+        semester,
+        subject,
+        department
+    })
+    
+    console.log("assignments",assignments)
+
+    return res  
+        .status(200)
+        .json(new ApiResponse(200, assignments, "Assignment fetched successfully"))
+
+})
+
+export {
+    updateProfile,
+    getProfile,
+    getAttendance,
+    getAssignments
+};

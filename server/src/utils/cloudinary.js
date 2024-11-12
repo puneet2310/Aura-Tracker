@@ -17,7 +17,7 @@ const uploadOnCloudinary = async (localFilePath) => {
 
         const response = await cloudinary.uploader.upload(
             localFilePath, {
-                resource_type: "auto" // automatically detect which type of file is coming
+                resource_type: "raw" // automatically detect which type of file is coming
             }
         )
 

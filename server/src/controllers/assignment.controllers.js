@@ -55,6 +55,30 @@ const uploadAssignment = asyncHandler(async (req, res) => {
    
 })
 
+const getAssignments = asyncHandler(async (req, res) => {
+
+    console.log("req.body: ", req.body)
+    const department = req.params.stream
+    const semester = req.params.semester
+    const subject = req.params.subject
+
+    console.log("Department: ", department , semester, subject)
+
+    const assignments = await Assignment.find({
+        semester,
+        subject,
+        department
+    })
+    
+    console.log("assignments",assignments)
+
+    return res  
+        .status(200)
+        .json(new ApiResponse(200, assignments, "Assignment fetched successfully"))
+
+})
+
 export {
-    uploadAssignment
+    uploadAssignment,
+    getAssignments
 }

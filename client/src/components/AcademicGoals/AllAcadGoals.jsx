@@ -49,8 +49,18 @@ function AllAcadGoals() {
             }
         };
 
+        const semester = 6;
+        const stream = 'CSE';
+        const subject = 'Automata'
+
+        const fetchAssignments = async () => {
+            const response = await axiosInstance.get(`/student/get-assignments/${semester}/${stream}/${subject}`);
+            console.log("Response is: ", response)
+        }
+
         if (authStatus) {
             fetchGoals();
+            fetchAssignments()
         }
     }, [authStatus, userData, selectedStatus]);
 

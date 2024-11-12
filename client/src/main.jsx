@@ -24,6 +24,7 @@ import DisplayStudent from './components/Dashboard/DisplayStudent.jsx';
 import AttendancePage from './components/Attendance/AttendancePage.jsx';
 import ViewAttendance from './components/Attendance/ViewAttendance.jsx';
 import SetAssignment from './components/Assignment/SetAssignment.jsx';
+import AllAssignments from './components/Assignment/AllAssignments.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -88,6 +89,10 @@ const router = createBrowserRouter([
       {
         path: '/attendance',
         element: <ViewAttendance />
+      },
+      {
+        path: '/all-assignments',
+        element: <AllAssignments/>
       }
     ],
   },
