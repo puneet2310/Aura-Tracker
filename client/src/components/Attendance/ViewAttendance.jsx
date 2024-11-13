@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../utils/axios.helper';
 import AttendanceTable from '../Attendance/AttendanceTable';
+import { FaSpinner } from 'react-icons/fa';
 
 function AttendancePage() {
   const [attendanceData, setAttendanceData] = useState([]);
@@ -25,7 +26,12 @@ function AttendancePage() {
   }, []);
 
   if (loading) {
-    return <p className="text-center text-indigo-500 animate-pulse">Loading...</p>;
+    return (
+      <div className="flex flex-col justify-center items-center mt-8 min-h-screen">
+          <FaSpinner className="animate-spin text-indigo-600 text-3xl" /> 
+          <p className='mt-4'>Please wait while loading...</p>
+      </div>
+    )
   }
 
   return (

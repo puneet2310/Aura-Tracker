@@ -4,26 +4,27 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { openNotification } from '../Notification/antd';
+import Loading from '../Loading';
 
 function AttendancePage() {
   const [students, setStudents] = useState([]);
   const [attendance, setAttendance] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState('');
   const [selectedSemester, setSelectedSemester] = useState('');
   const userData = useSelector((state) => state.auth.userData);
-  console.log(userData)
+  console.log(userData);
 
-  const subjects = ['Analysis of Algorithms', 'Automata', 'OOPs']
+  const subjects = ['Analysis of Algorithms', 'Automata', 'OOPs'];
   const semesters = [1, 2, 3, 4, 5, 6, 7, 8]; // Add any semesters you want here
 
   useEffect(() => {
     console.log("Attendance state has changed:", attendance);
   }, [attendance]);
 
-  const fetchStudents = async () => {
-    if (!selectedSubject || !selectedSemester) return;
+  
 
+  const fetchStudents = async () => {
     setLoading(true);
     try {
       const response1 = await axiosInstance.get('/faculty/get-profile');
@@ -40,6 +41,7 @@ function AttendancePage() {
     }
   };
 
+
   const handleAttendanceChange = (studentId, status) => {
     console.log(studentId, status);
     setAttendance((prev) => ({ ...prev, [studentId]: status }));
@@ -53,15 +55,8 @@ function AttendancePage() {
   };
 
   const submitAttendance = async () => {
-    if (!selectedSubject) {
-      Swal.fire({
-        title: "Please select a subject.",
-        icon: "info",
-        confirmButtonText: "OK",
-        timer: 3000,
-      });
-      return;
-    }
+
+
     const data = {
       subject: selectedSubject,
       department: "CSE",
@@ -104,6 +99,10 @@ function AttendancePage() {
     }
   };
 
+  useEffect(() => {
+    fetchStudents();
+  }, [selectedSubject, selectedSemester]);
+
   return (
     <div className="max-w-4xl mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-3xl font-semibold text-center mb-6 text-gray-700">Attendance</h2>
@@ -114,6 +113,7 @@ function AttendancePage() {
           value={selectedSubject}
           onChange={(e) => setSelectedSubject(e.target.value)}
           className="block w-full p-2 border rounded-md text-gray-700 mr-4"
+          aria-label="Select Subject"
         >
           <option value="">Select a Subject</option>
           {subjects.map((subject) => (
@@ -135,17 +135,17 @@ function AttendancePage() {
             </option>
           ))}
         </select>
-
-        <button
-          onClick={fetchStudents}
-          className="ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
-        >
-          Load Students
-        </button>
       </div>
 
+      {/* Show Error if Subject or Semester is not selected */}
+      {(selectedSubject === '' || selectedSemester === '') && !loading && (
+        <div className="text-red-600 text-center mb-4">
+          <p>Please select both a Subject and Semester.</p>
+        </div>
+      )}
+
       {loading ? (
-        <p className="text-center text-indigo-500 animate-pulse">Loading students...</p>
+        <Loading />
       ) : (
         <table className="min-w-full bg-white shadow-md rounded overflow-hidden">
           <thead className="bg-indigo-500 text-white">
@@ -183,6 +183,7 @@ function AttendancePage() {
       <div className="flex justify-center mt-6">
         <button
           onClick={submitAttendance}
+          disabled={loading}
           className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-200"
         >
           Submit Attendance

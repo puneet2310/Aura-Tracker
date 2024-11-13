@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { FaEdit, FaSave } from 'react-icons/fa';
+import { FaEdit, FaSave, FaSpinner } from 'react-icons/fa';
 import axiosInstance from '../../utils/axios.helper';
 import { useDispatch, useSelector } from 'react-redux';
 import { login as authLogin } from '../../store/authSlice';
+import Loading from '../Loading';
+import { userAvatar } from '../../assets/default';
 
 
 function Profile() {
@@ -130,10 +132,15 @@ function Profile() {
     };
 
     if (!isUserDataLoaded) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex flex-col  items-center mt-8 min-h-screen">
+                <FaSpinner className="animate-spin text-indigo-600 text-3xl" /> {/* Loader with spinning animation */}
+                <p className='mt-4'>Please wait while loading...</p>
+            </div>
+        )
     }
     const handleEditClick = () => {
-        setEditField('role'); // When "Edit" is clicked, set the field to editable
+        setEditField('role'); 
     };
 
     return (
@@ -142,7 +149,7 @@ function Profile() {
             <h1 className="text-2xl font-bold text-indigo-800 mb-6 text-center">Profile</h1>
             <div className="flex justify-center mb-6">
                 <img
-                    src={LocalUserInfo.avatar || userData?.avatar}
+                    src={LocalUserInfo.avatar || userData?.avatar || userAvatar}
                     alt="User Profile"
                     className="w-28 h-28 rounded-full shadow-lg"
                 />

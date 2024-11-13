@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../utils/axios.helper.js";
-import { login as authLogin } from "../store/authSlice";
+import axiosInstance from "../../utils/axios.helper.js";
+import { login as authLogin } from "../../store/authSlice.js";
 import { toast } from "react-toastify";
 import GoogleButton from "react-google-button";
-import Button from "./Button.jsx";
-import { icons } from "../assets/Icons.jsx";
+import Button from "../Button.jsx";
+import { icons } from "../../assets/Icons.jsx";
 function GoogleLogin() {
     const dispatch = useDispatch();
     const navigate = useNavigate();

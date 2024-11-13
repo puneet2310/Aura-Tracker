@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ClassSchedule from './ClassSchedule';
 import axiosInstance from '../../utils/axios.helper';
+import Loading from '../Loading';
 
 const TimetablePage = () => {
     const [loading, setLoading] = useState(true);
@@ -30,7 +31,7 @@ const TimetablePage = () => {
     }, []);
 
     if (loading) {
-        return <p>Loading...</p>; // Show loading while data is being fetched
+        <Loading/>
     }
 
     if (error) {

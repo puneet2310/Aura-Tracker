@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../utils/axios.helper.js';
 import { FaFilePdf } from 'react-icons/fa'; // FontAwesome PDF Icon
+import Loading from '../Loading.jsx';
 
 function AllAssignments() {
     const [assignments, setAssignments] = useState([]);
@@ -65,7 +66,7 @@ function AllAssignments() {
                 <div className="mt-6">
                     <h3 className="text-xl font-semibold mb-4">Assignments</h3>
                     {loading ? (
-                        <p>Loading assignments...</p>
+                        <Loading/>
                     ) : assignments.length > 0 ? (
                         <ul className="space-y-4">
                             {assignments.map((assign) => (

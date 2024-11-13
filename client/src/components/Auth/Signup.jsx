@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import axiosInstance from "../utils/axios.helper.js";
-import Logo from "./Logo";
-import Input from "./Input";
-import Button from "./Button";
+import axiosInstance from "../../utils/axios.helper.js";
+import Logo from "../Logo";
+import Input from "../Input";
+import Button from "../Button";
 import { toast } from "react-toastify";
-import { icons } from "../assets/Icons.jsx";
+import { icons } from "../../assets/Icons.jsx";
 import GoogleLogin from "./GoogleLogin.jsx";
 
 function SignUp() {

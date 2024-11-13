@@ -44,7 +44,7 @@ function SetAcademicGoals() {
                 })
             );
 
-            navigate("/");
+            navigate("/dashboard/view-acad-goals");
         } catch (err) {
             setError(err.message || "Failed to create goal.");
         } finally {

@@ -1,0 +1,1 @@
+export const userAvatar = 'https://theacademic.com/wp-content/uploads/2023/05/white-cute-robot-shopping-in-a-store-scaled.jpg'

@@ -46,7 +46,7 @@ const ClassSchedule = ({ stream, semester }) => {
         return <div className="text-center">Loading...</div>;
     }
 
-    if (error) {
+    if (!loading && error) {
         return <div className="text-red-500 text-center">{error}</div>;
     }
 

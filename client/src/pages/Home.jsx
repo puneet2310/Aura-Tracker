@@ -5,6 +5,7 @@ import { Button } from '../components';
 import { ArrowRightIcon } from '@heroicons/react/solid';
 import axiosInstance from '../utils/axios.helper';
 import AcadLeaderBoard from '../components/LeaderBoard/AcadLeaderBoard';
+import Loading from '../components/Loading';
 
 function Home() {
   const [loading, setLoading] = useState(false);
@@ -53,7 +54,7 @@ function Home() {
   return (
     <div className="min-h-screen  items-start p-8 text-center bg-gray-100">
       {loading ? (
-        <p className="text-gray-500 animate-pulse">Loading...</p>
+        <Loading/>
       ) : (
         <>
           {/* Left Side Content */}

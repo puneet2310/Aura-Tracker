@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../utils/axios.helper';
 import { useSelector } from 'react-redux';
 import { FaCoins } from 'react-icons/fa';
+import Loading from '../Loading';
 function AcadLeaderBoard() {
     const [leaderboardData, setLeaderboardData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -35,7 +36,7 @@ function AcadLeaderBoard() {
                 Academic Leaderboard
             </h2>
             {loading ? (
-                <p className="text-center text-gray-500 text-lg">Loading...</p>
+                <Loading/>
             ) : (
                 <ul className="overflow-y-auto max-h-72 space-y-3">
                     {leaderboardData?.map((user, index) => (

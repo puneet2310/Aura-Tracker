@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axiosInstance from '../../utils/axios.helper';
 import { FaCrown } from 'react-icons/fa';
+import { userAvatar } from '../../assets/default';
 
 function Profile({ presentDays }) {
     const userData = useSelector((state) => state.auth.userData);
@@ -27,7 +28,7 @@ function Profile({ presentDays }) {
         <div className="bg-indigo-200 p-6 rounded-lg shadow-md mb-6">
             <div className="flex justify-center items-center p-6 rounded-lg shadow-md mb-6">
                 <img
-                    src={userData.avatar}
+                    src={userData.avatar || userAvatar}
                     alt="User Profile"
                     className="ml-9 w-24 h-24 rounded-full mr-6 shadow-lg"
                 />

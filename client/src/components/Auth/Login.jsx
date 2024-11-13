@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { login as authLogin } from '../store/authSlice';
-import { addUser, addUserAcadGoals } from '../store/userSlice.js';
-import { Button, Input, Logo } from './index';
+import { login as authLogin } from '../../store/authSlice';
+import { addUser, addUserAcadGoals } from '../../store/userSlice.js';
+import { Button, Input, Logo } from '../index';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import axiosInstance from '../utils/axios.helper';
+import axiosInstance from '../../utils/axios.helper';
 import { toast } from 'react-toastify';
-import { icons } from '../assets/Icons.jsx';
+import { icons } from '../../assets/Icons.jsx';
 import GoogleLogin from './GoogleLogin.jsx';
 
 function Login() {

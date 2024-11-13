@@ -61,14 +61,14 @@ function AssignmentSubmitForm() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center  px-4 bg-gray-100">
+        <div className="flex flex-col items-center justify-center mt-8 mb-6  px-4 bg-gray-100">
             <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg ">
                 <div className="flex justify-center mb-6">
                     <Link to="/">
                         <Logo width="76" />
                     </Link>
                 </div>
-                <h2 className="text-3xl font-bold text-center mb-4 text-gray-800">Submit Assignment</h2>
+                <h2 className="text-3xl font-bold text-center mb-4 text-gray-800">Upload Assignment</h2>
                 {error && (
                     <p className="text-red-600 mb-4 text-center font-medium">{error}</p>
                 )}
@@ -152,7 +152,7 @@ function AssignmentSubmitForm() {
                         className="w-full py-2 rounded-lg text-white transition-all duration-300 hover:bg-indigo-700 transform hover:scale-105"
                         bgColor={loading ? "bg-indigo-800" : "bg-indigo-600"}
                     >
-                        {loading ? <span>{icons.loading}</span> : "Submit Assignment"}
+                        {loading ? <span>{icons.loading}</span> : "Upload Assignment"}
                     </Button>
                 </form>
             </div>

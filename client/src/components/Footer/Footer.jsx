@@ -49,14 +49,14 @@ function Footer() {
                 </Link>
                 {userData.role !== 'Faculty' ? (
                   <Link
-                    to="/set-acad-goals"
+                    to="/dashboard/set-acad-goals"
                     className="text-gray-400 transition-colors duration-300 hover:text-blue-400"
                   >
                     Set Academic Goals
                   </Link>
                 ) : (
                   <Link
-                    to="faculty/take-attendance"
+                    to="dashboard/faculty/take-attendance"
                     className="text-gray-400 transition-colors duration-300 hover:text-blue-400"
                   >
                     Take Attendance

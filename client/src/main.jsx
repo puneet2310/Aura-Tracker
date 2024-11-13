@@ -25,6 +25,7 @@ import AttendancePage from './components/Attendance/AttendancePage.jsx';
 import ViewAttendance from './components/Attendance/ViewAttendance.jsx';
 import SetAssignment from './components/Assignment/SetAssignment.jsx';
 import AllAssignments from './components/Assignment/AllAssignments.jsx';
+import AcademicGoals from './components/Dashboard/AcademicGoals.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -47,51 +48,55 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: '/set-acad-goals',
+        path: '/dashboard/set-acad-goals',
         element: <SetAcademicGoals />,
       },
       {
-        path: '/all-acad-goals',
+        path: '/dashboard/all-acad-goals',
         element: <AllAcadGoals />,
+      },
+      {
+        path: '/dashboard/view-acad-goals',
+        element: <AcademicGoals />,
       },
       {
         path: '/about', // Add this route for the About Us page
         element: <AboutUs />,
       },
       {
-        path: '/timetable',
+        path: '/dashboard/timetable',
         element: <TimetablePage/>
       },
       {
-        path: '/timetable/edit',
+        path: '/dashboard/timetable/edit',
         element: <EditTimetableForm/>
       },
       {
-        path: '/profile',
+        path: '/dashboard/profile',
         element: <Profile />
       },
       {
-        path: '/contact',
+        path: '/dashboard/contact',
         element: <Contact />
       },
       {
-        path: '/students',
+        path: '/dashboard/students',
         element: <DisplayStudent />
       },
       {
-        path: '/faculty/take-attendance',
+        path: '/dashboard/faculty/take-attendance',
         element: <AttendancePage />
       },
       {
-        path: '/faculty/upload-assignment',
+        path: '/dashboard/faculty/upload-assignment',
         element: <SetAssignment />
       },
       {
-        path: '/attendance',
+        path: '/dashboard/attendance',
         element: <ViewAttendance />
       },
       {
-        path: '/all-assignments',
+        path: '/dashboard/all-assignments',
         element: <AllAssignments/>
       }
     ],

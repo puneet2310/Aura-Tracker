@@ -3,6 +3,7 @@ import axiosInstance from '../../utils/axios.helper';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import Loading from '../Loading';
 
 function DisplayStudent() {
   const [students, setStudents] = useState([]);
@@ -30,7 +31,7 @@ function DisplayStudent() {
   // Fetch students based on selected semester
   const loadStudents = async () => {
     if (!semester) {
-      alert("Please select a semester.");
+      // alert("Please select a semester.");
       return;
     }
 
@@ -46,6 +47,11 @@ function DisplayStudent() {
     setLoading(false);
     setIsSemesterSelected(true); // Update to reflect the semester is loaded
   };
+
+  useEffect(() => {
+    loadStudents()
+  }, [semester])
+
 
   const handleSetCR = async () => {
     if (selectedCR && semester) {
@@ -126,9 +132,7 @@ function DisplayStudent() {
       </div>
 
       {loading ? (
-        <p className="min-h-screen flex items-center justify-center text-lg text-center text-indigo-500 animate-pulse">
-          Loading students...
-        </p>
+        <Loading/>
       ) : !isSemesterSelected && semester ? (
         <p className="text-center text-gray-500 text-lg">
           Please load the students for Semester {semester}.

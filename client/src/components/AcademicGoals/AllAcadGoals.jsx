@@ -4,6 +4,7 @@ import axiosInstance from '../../utils/axios.helper';
 import { FaEdit, FaSave, FaTrashAlt, FaCheckCircle, FaRegCircle, FaCoins, FaTimesCircle } from 'react-icons/fa';
 import { openNotification } from '../Notification/antd';
 import Swal from 'sweetalert2';
+import Loading from '../Loading';
 
 function AllAcadGoals() {
     const optionsStatus = ['All', 'Active', 'Completed', 'Missed'];
@@ -273,7 +274,7 @@ function AllAcadGoals() {
                     </div>
                 ))}
                 {loading && (
-                    <p className="text-center text-gray-500">Loading goals...</p>
+                    <Loading/>
                 )}
             </div>
         </div>
