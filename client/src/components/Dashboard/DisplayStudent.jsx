@@ -180,14 +180,14 @@ function DisplayStudent() {
         </table>
       )}
 
-      <div className="mt-4 flex justify-end">
+      {/* <div className="mt-4 flex justify-end">
         <button
           onClick={handleSetCR}
           className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-200"
         >
           Set CR
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }
