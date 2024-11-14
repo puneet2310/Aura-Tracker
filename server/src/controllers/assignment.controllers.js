@@ -78,7 +78,88 @@ const getAssignments = asyncHandler(async (req, res) => {
 
 })
 
+const submitAssignments = asyncHandler(async(req, res) => {
+    const assignmentId = req.params.assignmentId
+    const studentId = req.user.student
+    console.log("req.body: ", req.body)
+    console.log("Assignment Id: ", assignmentId)
+    console.log("Student Id: ", studentId)
+    console.log("File: ", req.files)
+
+    const fileLocalPath = req.files?.file?.[0].path
+    console.log(fileLocalPath)
+
+    let file;
+    try {
+        file = await uploadOnCloudinary(fileLocalPath)
+        console.log("Uploaded file", file)
+    } catch (error) {
+        console.log("Error while uploading file", error)
+        throw new ApiError(500, "Failed to upload file")
+    }
+    const assignment = await Assignment.findById(assignmentId)
+    console.log("Assignment: ", assignment)
+
+    if(!assignment){
+        throw new ApiError(404, "Assignment not found")
+    }
+
+    try {
+        const student = await Student.findById(studentId)
+        const faculty = await Faculty.findById(assignment.createdBy)
+        console.log("Student: ", student)
+
+        if(!student || !faculty){
+            throw new ApiError(404, "Student or Faculty not found")
+        }
+
+        assignment.submissions.push({
+            student: student._id,
+            file: file?.url,
+        })
+
+        console.log("Assignment before submission: ", assignment)
+
+        await assignment.save()
+
+        console.log("Assignment after submission: ", assignment)
+
+        return res  
+        .status(200)
+        .json(new ApiResponse(200, assignment, "Assignment submitted successfully"))
+
+    }
+    catch (error) {
+
+        if(file){
+            await deleteFromCloudinary(file.public_id)
+        }
+        console.log("Error while fetching student or faculty", error)
+        throw new ApiError(500, "Something went wrong while fetching student or faculty")
+    }
+
+})
+
+const isSubmitted = asyncHandler(async(req, res) => {
+    const studentId = req.params.student
+    const assignmentId = req.params.assignmentId
+
+    const assignment = await Assignment.findById(assignmentId)
+    console.log("Response: ", assignment)
+
+    if(!assignment){
+        throw new ApiError(404, "Assignment not found")
+    }
+    const isSubmit = assignment.submissions.some(submission => submission.student.toString() === studentId)
+    console.log("Is submitted: ", isSubmit)
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, isSubmit, "Submission status fetched successfully"))
+})
 export {
     uploadAssignment,
-    getAssignments
+    getAssignments,
+    submitAssignments,
+    isSubmitted
 }

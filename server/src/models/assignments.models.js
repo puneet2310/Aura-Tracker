@@ -29,10 +29,18 @@ const assignmentSchmea = new Schema({
         type: String,
         required: true
     },
-    submissions: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Student',
-    }],
+    submissions: [
+        {
+            student:{
+                type: Schema.Types.ObjectId,
+                ref: 'Student',
+            },
+            file: {
+                type: String,
+                required: true
+            }
+        }
+    ],
     createdBy: {
         type: Schema.Types.ObjectId,
         ref: 'Faculty',
