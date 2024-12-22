@@ -10,12 +10,15 @@ import facultyRouter from "./routes/faculty.routes.js"
 import attendanceRouter from "./routes/attendance.routes.js"
 import classRepresentiveRouter from "./routes/classRepresentive.routes.js"
 import assignmentRouter from "./routes/assignment.routes.js"
+import getUserRouter from "./routes/getUsers.routes.js"
+import messageRouter from "./routes/message.routes.js"
+import chatGroupRouter from "./routes/chat-group.routes.js"
 import dotenv from "dotenv"
+import cookieParser from "cookie-parser"
 
 dotenv.config({
     path: "./.env"
 })
-import cookieParser from "cookie-parser"
 
 const app = express()
 console.log("hello i am in backend",process.env.CORS_ORIGIN)
@@ -45,6 +48,9 @@ app.use("/api/v1/timetable", timeTableRouter)
 app.use("/api/v1/attendance", attendanceRouter)
 app.use("/api/v1/classRepresentative", classRepresentiveRouter)
 app.use("/api/v1/assignment", assignmentRouter)
+app.use("/api/v1/messages",messageRouter)
+app.use("/api/v1/getUsers",getUserRouter)
+app.use("/api/v1/chat-group",chatGroupRouter)
 
 // app.use(errorHandler)
 

@@ -9,7 +9,8 @@ import {
 	FaCog,
 	FaQuestionCircle,
 	FaChild,
-	FaUserGraduate
+	FaUserGraduate,
+	FaSnapchat
 } from 'react-icons/fa';
 export const STUDENTS_SIDEBAR_LINKS = [
 	{
@@ -61,6 +62,12 @@ export const STUDENTS_SIDEBAR_LINKS = [
 		label: 'Timetable',
 		path: '/dashboard/timetable',
 		icon: <FaCalendarAlt />
+	},
+	{
+		key: 'connect',
+		label: 'Connect',
+		path: '/connect',
+		icon: <FaSnapchat />
 	}
 ];
 

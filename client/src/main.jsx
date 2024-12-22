@@ -3,7 +3,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import store from './store/store.js';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
@@ -26,6 +26,10 @@ import ViewAttendance from './components/Attendance/ViewAttendance.jsx';
 import SetAssignment from './components/Assignment/SetAssignment.jsx';
 import AllAssignments from './components/Assignment/AllAssignments.jsx';
 import AcademicGoals from './components/Dashboard/AcademicGoals.jsx';
+import Connect from './components/Dashboard/Connect.jsx';
+import { useEffect } from 'react';
+
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -98,6 +102,10 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/all-assignments',
         element: <AllAssignments/>
+      },
+      {
+        path: '/connect',
+        element: <Connect/>
       }
     ],
   },
