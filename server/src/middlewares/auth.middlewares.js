@@ -10,7 +10,7 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
-        throw new ApiError(401, "Authentication token missing");
+        throw new ApiError(405, "Authentication token missing");
     }
 
     try {
@@ -21,7 +21,7 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
         const user = await User.findById(decodedToken._id).select("-password -refreshToken");
 
         if (!user) {
-            throw new ApiError(401, "User not found or invalid token");
+            throw new ApiError(403, "User not found or invalid token");
         }
 
         // Attach user object to the request for use in subsequent middleware
@@ -33,10 +33,10 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
 
         // Handle specific token errors
         if (error.name === "TokenExpiredError") {
-            throw new ApiError(401, "Token has expired. Please login again.");
+            throw new ApiError(401, error.name);
         }
 
         // Generic token error
-        throw new ApiError(401, "Invalid authentication token");
+        throw new ApiError(402, "Invalid authentication token");
     }
 });

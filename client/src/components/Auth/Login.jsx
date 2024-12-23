@@ -26,12 +26,14 @@ function Login() {
             const user = response?.data?.data?.user;
             // const userData = response?.data?.data?.userData;
             const accessToken = `Bearer ${response.data.data.accessToken}`;
+            const refreshToken = `Bearer ${response.data.data.refreshToken}`;
             
             console.log("user: ", user)
             // console.log("userData: ", userData)
             if (user) {
                 dispatch(authLogin(user));
                 localStorage.setItem('access_token', accessToken);
+                localStorage.setItem('refresh_token', refreshToken);
                 axiosInstance.defaults.headers.common['Authorization'] = accessToken;
                 
                 toast.success('Login successful');

@@ -170,7 +170,7 @@ const loginUser = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .cookie("accessToken", accessToken, options)
-    .cookie("refresToken", refreshToken, options)
+    .cookie("refreshToken", refreshToken, options)
     .json(
       new ApiResponse(
         200,
@@ -254,20 +254,20 @@ const googleLogin = async (req,res) => {
 }
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-    const incomingRefreshToken =
-        req.cookies.refreshToken || req.body.refreshToken;
 
-    // console.log("Incoming refresh token" , incomingRefreshToken)
+  const incomingRefreshToken = req.cookies?.refreshToken || req.body.refreshToken;
+
+    console.log("Incoming refresh token" , incomingRefreshToken)
 
     if (!incomingRefreshToken) {
         throw new ApiError(401, "Refresh token is required");
     }
 
-    // console.log("Entering")
+    console.log("Entering")
 
     try {
         const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
-
+        console.log(decodedToken)
         const user = await User.findById(decodedToken?._id);
         console.log(user)
         
@@ -287,14 +287,13 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
             secure: process.env.NODE_ENV === "production",
         };
 
-        const { accessToken, refreshToken: newRefreshToken } =
-        await generateAccessAndRefreshToken(user._id);
+        const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshToken(user._id);
 
         user.refreshToken = newRefreshToken;
         await user.save({ validateBeforeSave: false });
 
-        // console.log("Refreshed access token", accessToken);
-        // console.log("Refreshed refresh token", newRefreshToken);
+        console.log("Refreshed access token", accessToken);
+        console.log("Refreshed refresh token", newRefreshToken);
 
         return res
             .status(200)

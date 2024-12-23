@@ -7,20 +7,6 @@ const axiosInstance = axios.create({
     withCredentials: true, //Ensures cookies, including any auth tokens, are sent with each request if needed.
 });
 
-// Request interceptor to add the access token to headers
-axiosInstance.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem("accessToken");
-        if (token) {
-            config.headers["Authorization"] = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
-
 // Response interceptor to handle token expiration
 axiosInstance.interceptors.response.use(
     (response) => {
@@ -28,6 +14,7 @@ axiosInstance.interceptors.response.use(
     },
     async (error) => {
         const errorMsg = parseErrorMessage(error.response.data);
+        console.log("Error response: ", errorMsg);
         const originalRequest = error.config;
         if (
             error.response.status === 401 &&
@@ -36,20 +23,24 @@ axiosInstance.interceptors.response.use(
         ) {
             originalRequest._retry = true;
             try {
-                const { data } = await axios.post(
-                    "/api/v1/users/refresh-token",
-                    {},
-                    { withCredentials: true }
+                const refreshToken = localStorage.getItem("refresh_token")?.replace("Bearer ", "");
+                if(!refreshToken) return;
+
+                console.log("Refresh token: ", refreshToken);
+                // toast.error("Session expired. Please login again!");
+                const { data } = await axiosInstance.post(
+                    "/users/refresh-token", { refreshToken: refreshToken }
                 );
-                localStorage.setItem("accessToken", data.data.accessToken);
+                const accessToken = `Bearer ${data.data.accessToken}`; 
+                localStorage.setItem("access_token", accessToken);
                 axiosInstance.defaults.headers.common[
                     "Authorization"
-                ] = `Bearer ${data.accessToken}`;
+                ] = accessToken;
                 return axiosInstance(originalRequest);
             } catch (err) {
                 console.error("Failed to refresh token", err);
-                localStorage.removeItem("accessToken");
-                window.location.reload();
+                localStorage.removeItem("access_token");
+                // window.location.reload();
                 toast.error("Session expired. Please login again!");
             }
         }
