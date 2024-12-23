@@ -21,8 +21,11 @@ const CreateGroupModal = ({ onClose }) => {
       try {
         setLoading(true);
         const response = await axiosInstance.get(`/getUsers`);
-        setAllUsers(response.data.data);
-        setFilteredUsers(response.data.data); // Initially, show all users
+        const users = response.data.data
+        const filtered = users.filter((user) => user.fullName != null)
+
+        setAllUsers(filtered);
+        setFilteredUsers(filtered); // Initially, show all users
       } catch (error) {
         console.error("Error fetching users:", error);
       } finally {

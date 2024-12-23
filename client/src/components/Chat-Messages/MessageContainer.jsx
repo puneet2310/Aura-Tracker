@@ -40,7 +40,7 @@ const NoChatSelected = () => {
 
     return (
         <div className="flex flex-col items-center justify-center w-full h-full bg-gray-100 text-gray-600 text-center px-6 py-8">
-			<p className="text-lg font-semibold">Welcome 👋 {userData.fullName} ❄</p>
+			<p className="text-lg font-semibold">Welcome 👋 {userData?.fullName} ❄</p>
 			<p className="text-lg font-semibold">Select a chat to start messaging</p>
 			<TiMessages className="text-gray-400 text-5xl mt-4" />
 		</div>
