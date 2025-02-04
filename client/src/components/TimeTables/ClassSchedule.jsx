@@ -26,11 +26,9 @@ const ClassSchedule = ({ stream, semester }) => {
                 setSchedule(response.data.data);
 
                 const response2 = await axiosInstance.get(`/classRepresentative/check-cr-status/${userData._id}`);
-                    console.log(response2);
-                    setIsCR(response2.data.data.isCR);
+                console.log(response2);
+                setIsCR(response2.data.data.isCR);
                 setError(''); // Clear any previous errors
-
-
             } catch (err) {
                 console.error('Error fetching the schedule:', err);
                 setError('Error fetching the schedule.');
@@ -69,7 +67,7 @@ const ClassSchedule = ({ stream, semester }) => {
     return (
         <>
             <div className="max-w-fit mx-auto my-8 p-4 border border-gray-300 rounded shadow-lg">
-                <h2 className="text-2xl font-bold text-center mb-4">
+                <h2 className="text-2xl font-bold text-center mb-4 text-black">
                     Class Schedule for {stream} ({semester})
                 </h2>
                 {schedule ? (
@@ -87,14 +85,14 @@ const ClassSchedule = ({ stream, semester }) => {
                         <tbody>
                             {days.map((day, dayIndex) => (
                                 <tr key={dayIndex}>
-                                    <td className="py-2 px-4 border border-gray-300 font-bold">{day}</td>
+                                    <td className="py-2 px-4 border border-gray-300 font-bold text-black">{day}</td>
                                     {times.map((time, timeIndex) => {
                                         const classInfo = getClassForTime(day, time);
                                         return (
                                             <td key={timeIndex} className="py-2 px-4 border border-gray-300 text-center">
                                                 {classInfo ? (
                                                     <>
-                                                        <div>{classInfo.subject}</div>
+                                                        <div className="text-black">{classInfo.subject}</div>
                                                         <div className="text-sm text-gray-500">{classInfo.instructor}</div>
                                                     </>
                                                 ) : (
@@ -108,7 +106,7 @@ const ClassSchedule = ({ stream, semester }) => {
                         </tbody>
                     </table>
                 ) : (
-                    <div className="text-center">No schedule available.</div>
+                    <div className="text-center text-black">No schedule available.</div>
                 )}
             </div>
 

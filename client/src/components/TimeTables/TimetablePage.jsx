@@ -31,20 +31,19 @@ const TimetablePage = () => {
     }, []);
 
     if (loading) {
-        <Loading/>
+        return <Loading />; // Ensure Loading component is rendered correctly
     }
 
     if (error) {
-        return <p>{error}</p>; // Show error message if there's an error
+        return <p className="text-red-500 text-center">{error}</p>; // Styled error message
     }
-
 
     console.log("Stream: ", stream);  
     console.log("Semester: ", semester);
 
     return (
         <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold text-center mb-6">Timetable</h1>
+            <h1 className="text-3xl font-bold text-center mb-6 text-black">Timetable</h1>
             <ClassSchedule stream={stream} semester={semester} />
         </div>
     );

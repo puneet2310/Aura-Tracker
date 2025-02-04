@@ -92,7 +92,7 @@ function AllAssignments() {
     return (
         <div className="flex flex-col items-center min-h-screen px-4 bg-gray-100">
             <div className="w-full max-w-2xl p-8 bg-white rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold text-center mb-6">Assignment Filter</h2>
+                <h2 className="text-2xl font-semibold text-center mb-6 text-black">Assignment Filter</h2>
 
                 {/* Filters */}
                 <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -113,7 +113,7 @@ function AllAssignments() {
 
                 {/* Assignment List */}
                 <div className="mt-6">
-                    <h3 className="text-xl font-semibold mb-4">Assignments</h3>
+                    <h3 className="text-xl font-semibold mb-4 text-black">Assignments</h3>
                     {loading ? (
                         <Loading />
                     ) : assignments.length > 0 ? (
@@ -124,9 +124,9 @@ function AllAssignments() {
 
                                 return (
                                     <li key={assign.id} className="p-4 border rounded-md shadow-sm flex flex-col space-y-3">
-                                        <h4 className="font-semibold">{assign.title}</h4>
-                                        <p className="text-gray-600">Description: {assign.description}</p>
-                                        <p className="text-gray-600">
+                                        <h4 className="font-semibold text-black">{assign.title}</h4>
+                                        <p className="text-gray-600 text-black">Description: {assign.description}</p>
+                                        <p className="text-gray-600 text-black">
                                             Due Date: {formatDate(assign.dueDate)}
                                             {!userHasSubmitted && missed && (
                                                 <span className="text-red-500 ml-2">(Missed)</span>
@@ -140,7 +140,7 @@ function AllAssignments() {
                                                 <a
                                                     href={assign.assignment}
                                                     download
-                                                    className="text-indigo-500 underline hover:text-indigo-700"
+                                                    className="text-indigo-500 underline hover:text-indigo-700 text-black"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                 >
@@ -148,12 +148,12 @@ function AllAssignments() {
                                                 </a>
                                             </div>
                                         ) : (
-                                            <p className="text-red-500">PDF file not available</p>
+                                            <p className="text-red-500 text-black">PDF file not available</p>
                                         )}
 
                                         {/* File Upload and Submit Button */}
                                         {userHasSubmitted ? (
-                                            <p className="text-green-500">Assignment already submitted</p>
+                                            <p className="text-green-500 text-black">Assignment already submitted</p>
                                         ) : (
                                             !missed && (
                                                 <div className="mt-4 flex items-center space-x-2">
@@ -176,7 +176,7 @@ function AllAssignments() {
                             })}
                         </ul>
                     ) : (
-                        <p>No assignments found for the selected filters.</p>
+                        <p className="text-black">No assignments found for the selected filters.</p>
                     )}
                 </div>
             </div>
