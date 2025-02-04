@@ -24,7 +24,7 @@ const app = express()
 console.log("hello i am in backend",process.env.CORS_ORIGIN)
 app.use(
     cors({
-        origin: process.env.CORS_ORIGIN,
+        origin:  true,  // no restrictions
         credentials: true
     })
 )
