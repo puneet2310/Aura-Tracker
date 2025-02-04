@@ -2,8 +2,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { parseErrorMessage } from "./parseErrorMsg";
 
+console.log("API_BASE_URL: ", import.meta.env.VITE_API_BASE_URL);
 const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_BASE_URL,
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     withCredentials: true, //Ensures cookies, including any auth tokens, are sent with each request if needed.
 });
 
