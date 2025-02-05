@@ -9,7 +9,7 @@ export const initializeSocket = (userId) => (dispatch, getState) => {
         return;
     }
 
-    const socket = io("http://localhost:3008", {
+    const socket = io(import.meta.env.VITE_API_URL, {
         query: { userId },
     });
 

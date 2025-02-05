@@ -2,11 +2,15 @@ import { Server } from 'socket.io'
 import http from 'http'
 import express from 'express'
 import {app} from "./app.js"
+import dotenv from "dotenv"
 
+dotenv.config({
+    path: "./.env"
+})
 const server = http.createServer(app)
 const io = new Server(server,{
     cors:{
-        origin: ['https://aura-tracker-8ztb.vercel.app'],
+        origin: process.env.CORS_ORIGIN,
         credentials: true
     }
 })
