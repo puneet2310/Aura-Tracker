@@ -111,6 +111,21 @@ export const FACULTY_SIDEBAR_LINKS = [
 	}
 ];
 
+export const NULL_SIDEBAR_LINKS = [
+	{
+		key: 'dashboard',
+		label: 'Dashboard',
+		path: '/dashboard',
+		icon: <FaThLarge />
+	},
+	{
+		key: 'profile',
+		label: 'Profile',
+		path: '/dashboard/profile',
+		icon: <FaUserCircle />
+	},
+];
+
 export const USER_SIDEBAR_BOTTOM_LINKS = [
 	{
 		key: 'settings',

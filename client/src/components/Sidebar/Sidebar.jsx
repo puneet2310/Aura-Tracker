@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FcBullish } from 'react-icons/fc'
 import { HiOutlineLogout } from 'react-icons/hi'
 import { FaChevronDown } from 'react-icons/fa' // Importing the chevron down icon
-import { STUDENTS_SIDEBAR_LINKS, FACULTY_SIDEBAR_LINKS, USER_SIDEBAR_BOTTOM_LINKS } from './Navigations.jsx'
+import { STUDENTS_SIDEBAR_LINKS, FACULTY_SIDEBAR_LINKS, NULL_SIDEBAR_LINKS, USER_SIDEBAR_BOTTOM_LINKS } from './Navigations.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout as authLogout } from '../../store/authSlice'
 import axiosInstance from '../../utils/axios.helper.js'
@@ -23,13 +23,16 @@ export default function Sidebar() {
   const userData = useSelector((state) => state.auth.userData)
 
   useEffect(() => {
+    console.log("userData: ", userData)
     if (userData?.role) {
       if (userData.role === 'Student') {
         setTopSideBarLinks(STUDENTS_SIDEBAR_LINKS)
-      } else {
+      } 
+      else if(userData.role === 'Faculty') {
         setTopSideBarLinks(FACULTY_SIDEBAR_LINKS)
       }
     }
+    else setTopSideBarLinks(NULL_SIDEBAR_LINKS)
   }, [userData]) // Run only when userData changes
 
   const handleLogout = async () => {

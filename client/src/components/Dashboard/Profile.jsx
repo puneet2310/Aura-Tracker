@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import axiosInstance from '../../utils/axios.helper';
 import { FaCrown } from 'react-icons/fa';
 import { userAvatar } from '../../assets/default';
@@ -26,6 +27,13 @@ function Profile({ presentDays }) {
 
     return (
         <div className="bg-indigo-200 p-6 rounded-lg shadow-md mb-6">
+            {userData?.role === undefined && (
+                <div className="bg-red-500 text-white text-center py-2 rounded mb-4">
+                    Please complete your profile section for accessing more features.{' '}
+                    <Link to="/dashboard/profile" className="underline text-blue-200 hover:text-white">Profile</Link>
+                </div>
+            )}
+
             <div className="flex justify-center items-center p-6 rounded-lg shadow-md mb-6">
                 <img
                     src={userData.avatar || userAvatar}
@@ -43,6 +51,7 @@ function Profile({ presentDays }) {
                                     cursor: 'default',
                                     borderBottom: '2px solid',
                                 }}
+                                readOnly
                             />
                         </div>
                     ))}
@@ -50,7 +59,7 @@ function Profile({ presentDays }) {
                     <p className="text-gray-600">Last Login: {userData.lastLogin}</p>
                 </div>
             </div>
-            
+
             {isCR && (
                 <div className="flex items-center justify-center mb-4 p-4 bg-yellow-200 text-yellow-800 rounded-lg shadow-md">
                     <FaCrown className="mr-2 text-yellow-500" />
