@@ -10,7 +10,7 @@ dotenv.config();
 export default defineConfig({
   server: {
     proxy: {
-      "/api": "http://localhost:3009/api/v1",  // Fallback to localhost in development
+      "/api": "https://aura-tracker.vercel.app/",  // Fallback to localhost in development
     },
   },
   plugins: [react()],
