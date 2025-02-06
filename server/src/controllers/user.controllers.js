@@ -230,16 +230,17 @@ const googleLogin = async (req,res) => {
         throw new ApiError(500, "Something went wrong while login");
       }
     
-      const options = {
-        httpOnly: true, // this makes the cookie non modifieable from the client side
-        secure: process.env.NODE_ENV === "production",
+      const cookieOptions = {
+        httpOnly: true, // Prevents access via JavaScript
+        secure: process.env.NODE_ENV === "deployment", // Secure only in production
+        sameSite: "none", // Required for cross-origin cookies (Vercel → Render)
       };
     
       console.log("User logged in successfully");
       return res
         .status(200)
-        .cookie("accessToken", accessToken, options)
-        .cookie("refresToken", refreshToken, options)
+        .cookie("accessToken", accessToken, cookieOptions)
+        .cookie("refreshToken", refreshToken, cookieOptions)
         .json(
           new ApiResponse(
             200,
@@ -283,9 +284,10 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
             throw new ApiError(401, "Refresh token is expired");
         }
 
-        const options = {
-            httpOnly: true, // this makes the cookie non modifieable from the client side
-            secure: process.env.NODE_ENV === "production",
+        const cookieOptions = {
+          httpOnly: true, // Prevents access via JavaScript
+          secure: process.env.NODE_ENV === "deployment", // Secure only in production
+          sameSite: "none", // Required for cross-origin cookies (Vercel → Render)
         };
 
         const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshToken(user._id);
@@ -298,8 +300,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
         return res
             .status(200)
-            .cookie("accessToken", accessToken, options)
-            .cookie("refreshToken", newRefreshToken, options)
+            .cookie("accessToken", accessToken, cookieOptions)
+            .cookie("refreshToken", newRefreshToken, cookieOptions)
             .json(
                 new ApiResponse(
                 200,
