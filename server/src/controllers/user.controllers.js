@@ -161,16 +161,17 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Something went wrong while login");
   }
 
-  const options = {
-    httpOnly: true, // this makes the cookie non modifieable from the client side
-    secure: process.env.NODE_ENV === "production",
+  const cookieOptions = {
+    httpOnly: true, // Prevents access via JavaScript
+    secure: process.env.NODE_ENV === "production", // Secure only in production
+    sameSite: "none", // Required for cross-origin cookies (Vercel → Render)
   };
 
   console.log("User logged in successfully");
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, cookieOptions)
+    .cookie("refreshToken", refreshToken, cookieOptions)
     .json(
       new ApiResponse(
         200,
