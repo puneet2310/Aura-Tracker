@@ -25,8 +25,13 @@ function GoogleLogin() {
                 if (result?.data?.data) {
                     dispatch(authLogin(result.data.data.user));
 
+                    console.log(result)
+
                     const accessToken = `Bearer ${result.data.data.accessToken}`;
                     const refreshToken = `Bearer ${result.data.data.refreshToken}`;
+
+                    console.log("accessToken", accessToken)
+                    console.log("refresh", refreshToken)
                     localStorage.setItem("access_token", accessToken);
                     localStorage.setItem("refresh_token", refreshToken);
                     axiosInstance.defaults.headers.common["Authorization"] = accessToken;
