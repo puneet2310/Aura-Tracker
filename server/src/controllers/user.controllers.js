@@ -331,14 +331,16 @@ const logoutUser = asyncHandler(async (req, res) => {
         throw new ApiError(404, "User not found");
     }
 
-    const options = {
-        httpOnly: true, // this makes the cookie non modifieable from the client side
-        secure: process.env.NODE_ENV === "production",
+    const cookieOptions = {
+      httpOnly: true, // Prevents access via JavaScript
+      secure: process.env.NODE_ENV === "deployment", // Secure only in production
+      sameSite: "none", // Required for cross-origin cookies (Vercel → Render)
     };
+  
     return res
         .status(200)
-        .clearCookie("accessToken", options)  //delete the cookie to client's browser
-        .clearCookie("refreshToken", options)
+        .clearCookie("accessToken", cookieOptions)  //delete the cookie to client's browser
+        .clearCookie("refreshToken", cookieOptions)
         .json(new ApiResponse(200, null, "User logged out successfully"));
 });
 

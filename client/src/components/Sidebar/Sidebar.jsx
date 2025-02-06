@@ -42,6 +42,7 @@ export default function Sidebar() {
       
       if (response.status === 200) {
         localStorage.removeItem('access_token')
+        localStorage.removeItem('refresh_token')
         console.log('Logout success')
         dispatch(authLogout())
         toast.success('Logged out successfully')
