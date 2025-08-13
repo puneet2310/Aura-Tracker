@@ -46,7 +46,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   //validation
   if (
-    [fullName, email, userName, password].some((field) => field?.trim() === "") 
+    [fullName, email, userName, password].some((field) => field?.trim() === "")
     //some is used to check if any of the field is empty and trim is used to remove spaces
   ) {
     throw new ApiError(400, "All fileds are required");
@@ -61,7 +61,7 @@ const registerUser = asyncHandler(async (req, res) => {
     console.log("See here : ", existedUser)
     throw new ApiError(403, "User already exists");
   }
-  
+
 
   //handle the images (images comes in file gives by the multer)
   console.warn(req.files);
@@ -98,17 +98,28 @@ const registerUser = asyncHandler(async (req, res) => {
       avatar: avatar?.url || "",
     });
 
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
+
     const createdUser = await User.findById(user._id).select(
       "-password -refreshToken"
-    );
+    )
+      .populate('student');
 
     if (!createdUser) {
       throw new ApiError(500, "Something went wrong while registering a user");
     }
 
+    const cookieOptions = {
+      httpOnly: true, // Prevents access via JavaScript
+      secure: process.env.NODE_ENV === "deployment", // Secure only in production
+      sameSite: "none", // Required for cross-origin cookies (Vercel → Render)
+    };
+
     return res
       .status(201)
-      .json(new ApiResponse(201, createdUser, "User Registered Scuccessfully"));
+      .cookie("accessToken", accessToken, cookieOptions)
+      .cookie("refreshToken", refreshToken, cookieOptions)
+      .json(new ApiResponse(201, { user: createdUser, accessToken, refreshToken }, "User registered successfully"));
   } catch (error) {
     console.log("User creation failed", error);
 
@@ -175,82 +186,82 @@ const loginUser = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        { user: loggedInUser, accessToken, refreshToken},
+        { user: loggedInUser, accessToken, refreshToken },
         "User logged in successfully"
       )
     );
 });
 
-const googleLogin = async (req,res) => {
+const googleLogin = async (req, res) => {
 
   try {
-      const {code} = req.query;
-      console.log("from controller",code)
+    const { code } = req.query;
+    console.log("from controller", code)
 
-      const googleRes = await oauth2Client.getToken(code)
-      console.log("googleRes: ",googleRes)
-      oauth2Client.setCredentials(googleRes.tokens)
+    const googleRes = await oauth2Client.getToken(code)
+    console.log("googleRes: ", googleRes)
+    oauth2Client.setCredentials(googleRes.tokens)
 
-      // Using the access token, the function makes a request to Google’s user info endpoint to retrieve user details
-      const userRes = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo', {
-          headers: {
-              Authorization: `Bearer ${googleRes.tokens.access_token}`
-          }
+    // Using the access token, the function makes a request to Google’s user info endpoint to retrieve user details
+    const userRes = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo', {
+      headers: {
+        Authorization: `Bearer ${googleRes.tokens.access_token}`
+      }
+    })
+
+    console.log("userRes: ", userRes.data)
+
+    const { email, name, picture } = userRes.data
+
+    const existingUser = await User.findOne({ email })
+    console.log("existingUser: ", existingUser)
+
+    let user = existingUser
+
+    if (!existingUser) {
+      const generatedPassword = crypto.randomBytes(32).toString('hex')
+      user = await User.create({
+        fullName: name,
+        email,
+        password: generatedPassword,
+        userName: name.toLowerCase(),
+        avatar: picture || "",
       })
+    }
 
-      console.log("userRes: ",userRes.data)
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+      user._id
+    );
 
-      const {email, name, picture} = userRes.data
+    const loggedInUser = await User.findById(user._id).select(
+      "-password -refreshToken"
+    );
 
-      const existingUser = await User.findOne({email})
-      console.log("existingUser: ",existingUser)
+    if (!loggedInUser) {
+      throw new ApiError(500, "Something went wrong while login");
+    }
 
-      let user = existingUser
-      
-      if(!existingUser){
-        const generatedPassword = crypto.randomBytes(32).toString('hex')  
-        user = await User.create({
-          fullName:name,
-          email,
-          password: generatedPassword,
-          userName: name.toLowerCase(),
-          avatar: picture || "",
-        })
-      }
+    const cookieOptions = {
+      httpOnly: true, // Prevents access via JavaScript
+      secure: process.env.NODE_ENV === "deployment", // Secure only in production
+      sameSite: "none", // Required for cross-origin cookies (Vercel → Render)
+    };
 
-      const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
-        user._id
+    console.log("User logged in successfully");
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, cookieOptions)
+      .cookie("refreshToken", refreshToken, cookieOptions)
+      .json(
+        new ApiResponse(
+          200,
+          { user: loggedInUser, accessToken, refreshToken },
+          "User logged in successfully"
+        )
       );
-    
-      const loggedInUser = await User.findById(user._id).select(
-        "-password -refreshToken"
-      );
-    
-      if (!loggedInUser) {
-        throw new ApiError(500, "Something went wrong while login");
-      }
-    
-      const cookieOptions = {
-        httpOnly: true, // Prevents access via JavaScript
-        secure: process.env.NODE_ENV === "deployment", // Secure only in production
-        sameSite: "none", // Required for cross-origin cookies (Vercel → Render)
-      };
-    
-      console.log("User logged in successfully");
-      return res
-        .status(200)
-        .cookie("accessToken", accessToken, cookieOptions)
-        .cookie("refreshToken", refreshToken, cookieOptions)
-        .json(
-          new ApiResponse(
-            200,
-            { user: loggedInUser, accessToken, refreshToken },
-            "User logged in successfully"
-          )
-        );
   } catch (error) {
-      console.log("Error while requesting google code", error)
-      res.status(500).json({error: error.message})
+    console.log("Error while requesting google code", error)
+    res.status(500).json({ error: error.message })
   }
 
 }
@@ -259,78 +270,29 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
   const incomingRefreshToken = req.cookies?.refreshToken || req.body.refreshToken;
 
-    console.log("Incoming refresh token" , incomingRefreshToken)
+  console.log("Incoming refresh token", incomingRefreshToken)
 
-    if (!incomingRefreshToken) {
-        throw new ApiError(401, "Refresh token is required");
-    }
+  if (!incomingRefreshToken) {
+    throw new ApiError(401, "Refresh token is required");
+  }
 
-    console.log("Entering")
+  console.log("Entering")
 
-    try {
-        const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
-        console.log(decodedToken)
-        const user = await User.findById(decodedToken?._id);
-        console.log(user)
-        
-        //Is there a user with this ID?" (existence)
-        if (!user) {
-            throw new ApiError(404, "Invalid refresh token");
-        }
-
-        //Is the user's refresh token still valid? " (validity) --> may be user come after the expiry time
-        if (user.refreshToken !== incomingRefreshToken) {
-            // console.log(user.refreshAccessToken, incomingRefreshToken)
-            throw new ApiError(401, "Refresh token is expired");
-        }
-
-        const cookieOptions = {
-          httpOnly: true, // Prevents access via JavaScript
-          secure: process.env.NODE_ENV === "deployment", // Secure only in production
-          sameSite: "none", // Required for cross-origin cookies (Vercel → Render)
-        };
-
-        const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshToken(user._id);
-
-        user.refreshToken = newRefreshToken;
-        await user.save({ validateBeforeSave: false });
-
-        console.log("Refreshed access token", accessToken);
-        console.log("Refreshed refresh token", newRefreshToken);
-
-        return res
-            .status(200)
-            .cookie("accessToken", accessToken, cookieOptions)
-            .cookie("refreshToken", newRefreshToken, cookieOptions)
-            .json(
-                new ApiResponse(
-                200,
-                { accessToken, refreshToken: newRefreshToken },
-                "Access Token refreshed successfully"
-                )
-            );
-    } catch (error) {
-        console.log("Error while refreshing access token", error);
-        throw new ApiError(500, "Error while refreshing access token");
-    }
-});
-
-const logoutUser = asyncHandler(async (req, res) => {
-    const user = await User.findByIdAndUpdate(
-        req.user._id,
-        {
-        $set: {
-            "refreshToken": null, // update in the database
-        },
-        },
-        { new: true }
-    );
-
+  try {
+    const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+    console.log(decodedToken)
+    const user = await User.findById(decodedToken?._id);
     console.log(user)
 
-    if(!user){
-        console.log("User not found while logging out");
-        throw new ApiError(404, "User not found");
+    //Is there a user with this ID?" (existence)
+    if (!user) {
+      throw new ApiError(404, "Invalid refresh token");
+    }
+
+    //Is the user's refresh token still valid? " (validity) --> may be user come after the expiry time
+    if (user.refreshToken !== incomingRefreshToken) {
+      // console.log(user.refreshAccessToken, incomingRefreshToken)
+      throw new ApiError(401, "Refresh token is expired");
     }
 
     const cookieOptions = {
@@ -338,33 +300,82 @@ const logoutUser = asyncHandler(async (req, res) => {
       secure: process.env.NODE_ENV === "deployment", // Secure only in production
       sameSite: "none", // Required for cross-origin cookies (Vercel → Render)
     };
-  
+
+    const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshToken(user._id);
+
+    user.refreshToken = newRefreshToken;
+    await user.save({ validateBeforeSave: false });
+
+    console.log("Refreshed access token", accessToken);
+    console.log("Refreshed refresh token", newRefreshToken);
+
     return res
-        .status(200)
-        .clearCookie("accessToken", cookieOptions)  //delete the cookie to client's browser
-        .clearCookie("refreshToken", cookieOptions)
-        .json(new ApiResponse(200, null, "User logged out successfully"));
+      .status(200)
+      .cookie("accessToken", accessToken, cookieOptions)
+      .cookie("refreshToken", newRefreshToken, cookieOptions)
+      .json(
+        new ApiResponse(
+          200,
+          { accessToken, refreshToken: newRefreshToken },
+          "Access Token refreshed successfully"
+        )
+      );
+  } catch (error) {
+    console.log("Error while refreshing access token", error);
+    throw new ApiError(500, "Error while refreshing access token");
+  }
+});
+
+const logoutUser = asyncHandler(async (req, res) => {
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        "refreshToken": null, // update in the database
+      },
+    },
+    { new: true }
+  );
+
+  console.log(user)
+
+  if (!user) {
+    console.log("User not found while logging out");
+    throw new ApiError(404, "User not found");
+  }
+
+  const cookieOptions = {
+    httpOnly: true, // Prevents access via JavaScript
+    secure: process.env.NODE_ENV === "deployment", // Secure only in production
+    sameSite: "none", // Required for cross-origin cookies (Vercel → Render)
+  };
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", cookieOptions)  //delete the cookie to client's browser
+    .clearCookie("refreshToken", cookieOptions)
+    .json(new ApiResponse(200, null, "User logged out successfully"));
 });
 
 const changeCurrentPassword = asyncHandler(async (req, res) => {
-    const { oldPassword, newPassword } = req.body;
+  const { oldPassword, newPassword } = req.body;
 
-    console.log(req.user?._id);
-    const user = await User.findById(req.user?._id);
-    const isPasswordValid = await user.isPasswordCorrect(oldPassword);
+  console.log(req.user?._id);
+  const user = await User.findById(req.user?._id);
+  const isPasswordValid = await user.isPasswordCorrect(oldPassword);
 
-    if (!isPasswordValid) {
-        console.log("Old password is incorrect while updating password");
-        throw new ApiError(400, "Old password is incorrect");
-    }
+  if (!isPasswordValid) {
+    console.log("Old password is incorrect while updating password");
+    throw new ApiError(400, "Old password is incorrect");
+  }
 
-    user.password = newPassword;
+  user.password = newPassword;
 
-    await user.save({ validateBeforeSave: false });
+  await user.save({ validateBeforeSave: false });
 
-    return res
-        .status(200)
-        .json(new ApiResponse(200, null, "Password changed successfully"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "Password changed successfully"));
 });
 
 const getCurrentUser = asyncHandler(async (req, res) => {
@@ -405,9 +416,9 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
 });
 
 const updateProfile = asyncHandler(async (req, res) => {
-  const {role, regNo, semester, stream} = req.body;
+  const { role, regNo, semester, stream } = req.body;
   const currentUser = req.user;
-  
+
   try {
     const user = await User.findByIdAndUpdate(
       currentUser?._id,
@@ -421,7 +432,7 @@ const updateProfile = asyncHandler(async (req, res) => {
       },
       { new: true }
     ).select("-password -refreshToken");
-  
+
     console.log("User details is: ", user)
 
     return res
@@ -433,7 +444,7 @@ const updateProfile = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Error while updating user details");
   }
 
-  return 
+  return
 })
 
 const updateUserAvatar = asyncHandler(async (req, res) => {
@@ -465,7 +476,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
 });
 
 const calculateAcadAura = asyncHandler(async (req, res) => {
-  const userId = req.user._id; 
+  const userId = req.user._id;
 
   const completedGoals = await User.aggregate([
     {
@@ -509,9 +520,9 @@ const calculateAcadAura = asyncHandler(async (req, res) => {
 const leaderboard = asyncHandler(async (req, res) => {
   const users = await User.find({
     role: "Student",                  // Filter for only students
-  }).sort({ acadAura: -1 });  
-  console.log("LeaderBoard: ",users)
-  
+  }).sort({ acadAura: -1 });
+  console.log("LeaderBoard: ", users)
+
   return res
     .status(200)
     .json(new ApiResponse(200, users, "Leaderboard fetched successfully"));

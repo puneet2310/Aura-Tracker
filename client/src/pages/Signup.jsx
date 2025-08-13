@@ -1,10 +1,17 @@
-import React from 'react'
-import {Signup as SignupComponent } from '../components'
+import React, { useEffect } from 'react'
+import { Signup as SignupComponent } from '../components'
+
 function Signup() {
+  // Log once on mount, not inside JSX
+  useEffect(() => {
+    console.log("signup in pages folder")
+  }, [])
+
   return (
-    console.log("signup in pages folder"),
-    <div className='py-8'>
-        <SignupComponent/>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md">
+        <SignupComponent />
+      </div>
     </div>
   )
 }
